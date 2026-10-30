@@ -1,0 +1,5 @@
+node_modules
+.next
+src/generated
+content/courses
+package-lock.json
