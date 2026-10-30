@@ -57,4 +57,11 @@ export const courseConfig: CourseConfig[] = [
     description:
       'Read data correctly, spot problems in reports, build clear client reports and explain numbers without overpromising.',
   },
+  {
+    file: 'cyber-security-basics-for-everyone.md',
+    slug: 'cyber-security-basics',
+    order: 8,
+    description:
+      'For everyone in the organisation: stay safe from phishing, malware and scams, handle passwords and client access properly, and know how to report an incident.',
+  },
 ];

@@ -137,7 +137,7 @@ This creates two temporary users, checks that user B cannot read, change, delete
 ## Project layout
 
 ```
-content/courses/*.md       the seven course files (source of truth)
+content/courses/*.md       the course files (source of truth)
 content/courses.config.ts  slug, order, badge, description per course
 scripts/build-content.ts   markdown -> src/generated/*.json (git-ignored)
 src/app/                   routes: (auth)/login, (app)/..., api/search-index

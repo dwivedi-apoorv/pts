@@ -1,6 +1,6 @@
 # Editing the course content
 
-The seven markdown files in `content/courses/` are the source of truth. Edit a file, commit, and redeploy.
+The markdown files in `content/courses/` are the source of truth. Edit a file, commit, and redeploy.
 The build reads them with a tolerant parser, and **fails with the file name and line number** if it cannot understand something,
 so a mistake never reaches the live site.
 
