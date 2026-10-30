@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ProgressBar } from '@/components/progress-bar';
 import { StatusChip } from '@/components/status-chip';
+import { getAllowedSlugs } from '@/lib/access';
 import { requireMember } from '@/lib/auth';
 import { getCourses } from '@/lib/content';
 import { courseProgress } from '@/lib/progress-calc';
@@ -10,11 +11,16 @@ export const metadata = { title: 'My progress' };
 
 export default async function MePage() {
   const { member, user } = await requireMember();
-  const all = await getUserProgress(user.id);
-  const rows = getCourses().map((course) => ({
-    course,
-    progress: courseProgress(course, all.completed[course.slug] ?? []),
-  }));
+  const [all, allowed] = await Promise.all([
+    getUserProgress(user.id),
+    getAllowedSlugs(),
+  ]);
+  const rows = getCourses()
+    .filter((c) => allowed.has(c.slug))
+    .map((course) => ({
+      course,
+      progress: courseProgress(course, all.completed[course.slug] ?? []),
+    }));
   const done = rows.reduce((n, r) => n + r.progress.done, 0);
   const total = rows.reduce((n, r) => n + r.progress.total, 0);
 

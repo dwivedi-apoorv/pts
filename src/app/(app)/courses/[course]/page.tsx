@@ -7,6 +7,7 @@ import { ProgressBar } from '@/components/progress-bar';
 import { StatusChip } from '@/components/status-chip';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
+import { getAllowedSlugs, requireCourseAccess } from '@/lib/access';
 import { requireMember } from '@/lib/auth';
 import { getCourse, getCourses } from '@/lib/content';
 import { courseProgress, continueChapter } from '@/lib/progress-calc';
@@ -19,7 +20,10 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<'/courses/[course]'>): Promise<Metadata> {
-  const course = getCourse((await params).course);
+  const slug = (await params).course;
+  const course = (await getAllowedSlugs()).has(slug)
+    ? getCourse(slug)
+    : undefined;
   return { title: course?.title ?? 'Course' };
 }
 
@@ -29,6 +33,7 @@ export default async function CoursePage({
   const { user } = await requireMember();
   const course = getCourse((await params).course);
   if (!course) notFound();
+  await requireCourseAccess(course.slug);
 
   const all = await getUserProgress(user.id);
   const progress = courseProgress(course, all.completed[course.slug] ?? []);

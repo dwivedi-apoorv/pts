@@ -8,6 +8,7 @@ import { PositionTracker } from '@/components/position-tracker';
 import { LessonMarkdown } from '@/components/lesson-markdown';
 import { QaAccordion } from '@/components/qa-accordion';
 import { MobileToc, Toc, type TocItem } from '@/components/toc';
+import { getAllowedSlugs, requireCourseAccess } from '@/lib/access';
 import { requireMember } from '@/lib/auth';
 import { getChapter, getCourse, getCourses } from '@/lib/content';
 import {
@@ -26,7 +27,9 @@ export async function generateMetadata({
   params,
 }: PageProps<'/courses/[course]/[chapter]'>): Promise<Metadata> {
   const { course, chapter } = await params;
-  const c = getCourse(course);
+  const c = (await getAllowedSlugs()).has(course)
+    ? getCourse(course)
+    : undefined;
   const found = c && getChapter(c, chapter);
   return { title: found ? `${found.chapter.title} · ${c.title}` : 'Lesson' };
 }
@@ -39,6 +42,7 @@ export default async function LessonPage({
   const course = getCourse(courseSlug);
   const found = course && getChapter(course, chapterSlug);
   if (!course || !found) notFound();
+  await requireCourseAccess(course.slug);
   const { chapter, prev, next } = found;
 
   const [progress, checklistState, selfCheck] = await Promise.all([

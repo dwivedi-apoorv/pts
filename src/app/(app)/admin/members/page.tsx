@@ -15,7 +15,11 @@ export const metadata = { title: 'Members' };
 
 export default async function MembersPage() {
   const { member: me } = await requireAdmin();
-  const { team } = await loadTeam();
+  const { team, roles } = await loadTeam();
+  const roleName = new Map(roles.roles.map((r) => [r.id, r.name]));
+  const roleOptions = roles.enabled
+    ? roles.roles.map((r) => ({ id: r.id, name: r.name }))
+    : null;
   const rows = filterAndSort(team, { sort: 'name' });
 
   return (
@@ -30,7 +34,7 @@ export default async function MembersPage() {
         </div>
         <div className="flex flex-wrap gap-2">
           <ImportMembersButton />
-          <AddMemberButton />
+          <AddMemberButton roles={roleOptions} />
         </div>
       </div>
 
@@ -55,8 +59,13 @@ export default async function MembersPage() {
                   Email
                 </th>
                 <th scope="col" className="px-3 py-2 font-semibold">
-                  Role
+                  Access
                 </th>
+                {roles.enabled && (
+                  <th scope="col" className="px-3 py-2 font-semibold">
+                    Role
+                  </th>
+                )}
                 <th scope="col" className="px-3 py-2 font-semibold">
                   Active
                 </th>
@@ -90,6 +99,19 @@ export default async function MembersPage() {
                       {m.role}
                     </Badge>
                   </td>
+                  {roles.enabled && (
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      {m.role === 'admin' ? (
+                        <span className="text-muted-foreground">
+                          All courses
+                        </span>
+                      ) : m.role_id && roleName.get(m.role_id) ? (
+                        roleName.get(m.role_id)
+                      ) : (
+                        <span className="text-muted-foreground">No role</span>
+                      )}
+                    </td>
+                  )}
                   <td className="px-3 py-2">
                     {m.active ? 'Yes' : <Badge variant="outline">No</Badge>}
                   </td>
@@ -115,8 +137,10 @@ export default async function MembersPage() {
                         email: m.email,
                         full_name: m.full_name,
                         role: m.role,
+                        role_id: m.role_id ?? null,
                         active: m.active,
                       }}
+                      roles={roleOptions}
                     />
                   </td>
                 </tr>

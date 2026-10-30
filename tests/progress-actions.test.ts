@@ -9,6 +9,7 @@ type Call = {
 };
 let calls: Call[];
 let dbError: unknown;
+let allowedSlugs: string[];
 
 function builder(table: string) {
   const call: Call = { table, op: '', filters: [] };
@@ -39,8 +40,17 @@ function builder(table: string) {
 beforeEach(() => {
   calls = [];
   dbError = null;
+  allowedSlugs = [
+    'project-management-onboarding',
+    'seo-basics',
+    'cyber-security-basics',
+    'posh-awareness',
+  ];
   vi.resetModules();
   vi.doMock('next/cache', () => ({ revalidatePath: vi.fn() }));
+  vi.doMock('@/lib/access', () => ({
+    getAllowedSlugs: async () => new Set(allowedSlugs),
+  }));
   vi.doMock('@/lib/auth', () => ({
     requireMember: async () => ({ user: { id: 'session-user' }, member: {} }),
   }));
@@ -109,6 +119,24 @@ describe('progress actions', () => {
     );
     expect(
       (await a.setSelfCheckResult(course.slug, '1-deadbeef', 'got_it')).ok,
+    ).toBe(false);
+    expect(calls).toHaveLength(0);
+  });
+
+  it('refuses to save progress for a course that is not assigned to the member', async () => {
+    allowedSlugs = ['seo-basics'];
+    const a = await actions();
+    const { course, chapter, item, question } = await realKeys(); // the first course, onboarding
+    expect(course.slug).toBe('project-management-onboarding');
+    expect(
+      (await a.setChapterComplete(course.slug, chapter.slug, true)).ok,
+    ).toBe(false);
+    expect((await a.recordPosition(course.slug, chapter.slug)).ok).toBe(false);
+    expect((await a.setChecklistItem(course.slug, item.key, true)).ok).toBe(
+      false,
+    );
+    expect(
+      (await a.setSelfCheckResult(course.slug, question.key, 'got_it')).ok,
     ).toBe(false);
     expect(calls).toHaveLength(0);
   });

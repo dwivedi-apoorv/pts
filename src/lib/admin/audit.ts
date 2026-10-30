@@ -8,6 +8,10 @@ export type AuditAction =
   | 'member.reactivate'
   | 'member.delete'
   | 'member.import'
+  | 'role.create'
+  | 'role.update'
+  | 'role.delete'
+  | 'course.everyone'
   | 'export.progress'
   | 'export.selfcheck';
 

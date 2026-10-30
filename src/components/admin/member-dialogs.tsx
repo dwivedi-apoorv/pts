@@ -41,8 +41,11 @@ export type MemberLite = {
   email: string;
   full_name: string | null;
   role: 'learner' | 'admin';
+  role_id?: string | null;
   active: boolean;
 };
+
+export type RoleOption = { id: string; name: string };
 
 const selectClass =
   'border-input bg-background focus-visible:ring-ring/50 h-8 w-full rounded-lg border px-2.5 text-sm focus-visible:ring-3 focus-visible:outline-none';
@@ -54,20 +57,25 @@ function report(res: AdminResult | null) {
   return Boolean(res?.ok);
 }
 
+type FormValues = {
+  full_name: string;
+  email: string;
+  role: 'learner' | 'admin';
+  role_id: string | null;
+};
+
 function MemberForm({
   initial,
+  roles,
   submitLabel,
   onSubmit,
   pending,
   onCancel,
 }: {
-  initial: { full_name: string; email: string; role: 'learner' | 'admin' };
+  initial: FormValues;
+  roles: RoleOption[] | null;
   submitLabel: string;
-  onSubmit: (v: {
-    full_name: string;
-    email: string;
-    role: 'learner' | 'admin';
-  }) => void;
+  onSubmit: (v: FormValues) => void;
   pending: boolean;
   onCancel: () => void;
 }) {
@@ -104,11 +112,11 @@ function MemberForm({
         />
       </div>
       <div>
-        <label htmlFor="m-role" className="mb-1 block text-sm font-medium">
-          Role
+        <label htmlFor="m-access" className="mb-1 block text-sm font-medium">
+          Access level
         </label>
         <select
-          id="m-role"
+          id="m-access"
           value={v.role}
           onChange={(e) =>
             setV({ ...v, role: e.target.value as 'learner' | 'admin' })
@@ -116,9 +124,35 @@ function MemberForm({
           className={selectClass}
         >
           <option value="learner">Learner</option>
-          <option value="admin">Admin</option>
+          <option value="admin">
+            Admin (manages members and sees every course)
+          </option>
         </select>
       </div>
+      {roles && (
+        <div>
+          <label htmlFor="m-role" className="mb-1 block text-sm font-medium">
+            Role
+          </label>
+          <select
+            id="m-role"
+            value={v.role_id ?? ''}
+            onChange={(e) => setV({ ...v, role_id: e.target.value || null })}
+            className={selectClass}
+          >
+            <option value="">No role (only courses for everyone)</option>
+            {roles.map((r) => (
+              <option key={r.id} value={r.id}>
+                {r.name}
+              </option>
+            ))}
+          </select>
+          <p className="text-muted-foreground mt-1 text-xs">
+            The role decides which courses this member sees. Admins always see
+            every course.
+          </p>
+        </div>
+      )}
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
@@ -131,7 +165,7 @@ function MemberForm({
   );
 }
 
-export function AddMemberButton() {
+export function AddMemberButton({ roles }: { roles: RoleOption[] | null }) {
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
   return (
@@ -148,13 +182,22 @@ export function AddMemberButton() {
             </DialogDescription>
           </DialogHeader>
           <MemberForm
-            initial={{ full_name: '', email: '', role: 'learner' }}
+            initial={{
+              full_name: '',
+              email: '',
+              role: 'learner',
+              role_id: null,
+            }}
+            roles={roles}
             submitLabel="Add member"
             pending={pending}
             onCancel={() => setOpen(false)}
             onSubmit={(v) =>
               start(async () => {
-                const res = await addMember(v).catch(() => null);
+                const res = await addMember({
+                  ...v,
+                  role_id: roles ? v.role_id : undefined,
+                }).catch(() => null);
                 if (report(res)) setOpen(false);
               })
             }
@@ -168,9 +211,11 @@ export function AddMemberButton() {
 export function MemberRowActions({
   member,
   isSelf,
+  roles,
 }: {
   member: MemberLite;
   isSelf: boolean;
+  roles: RoleOption[] | null;
 }) {
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -235,15 +280,19 @@ export function MemberRowActions({
               full_name: member.full_name ?? '',
               email: member.email,
               role: member.role,
+              role_id: member.role_id ?? null,
             }}
+            roles={roles}
             submitLabel="Save changes"
             pending={pending}
             onCancel={() => setEditing(false)}
             onSubmit={(v) =>
               start(async () => {
-                const res = await updateMember({ id: member.id, ...v }).catch(
-                  () => null,
-                );
+                const res = await updateMember({
+                  id: member.id,
+                  ...v,
+                  role_id: roles ? v.role_id : undefined,
+                }).catch(() => null);
                 if (report(res)) setEditing(false);
               })
             }

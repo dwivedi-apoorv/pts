@@ -197,16 +197,39 @@ describe('/api/search-index', () => {
         throw new Error('REDIRECT:/login');
       },
     }));
+    vi.doMock('@/lib/access', () => ({
+      getAllowedSlugs: async () => new Set<string>(),
+    }));
     const { GET } = await import('../src/app/api/search-index/route');
     await expect(GET()).rejects.toThrow('REDIRECT:/login');
   });
 
   it('returns the index privately to a member', async () => {
     vi.doMock('@/lib/auth', () => ({ requireMember: async () => ({}) }));
+    vi.doMock('@/lib/access', () => ({
+      getAllowedSlugs: async () => new Set(courses.map((c) => c.slug)),
+    }));
     const { GET } = await import('../src/app/api/search-index/route');
     const res = await GET();
     expect(res.headers.get('cache-control')).toMatch(/^private/);
     const body = (await res.json()) as unknown[];
     expect(body.length).toBe(records.length);
+  });
+
+  it('only returns records from courses assigned to the member', async () => {
+    vi.doMock('@/lib/auth', () => ({ requireMember: async () => ({}) }));
+    vi.doMock('@/lib/access', () => ({
+      getAllowedSlugs: async () => new Set(['cyber-security-basics']),
+    }));
+    const { GET } = await import('../src/app/api/search-index/route');
+    const body = (await (await GET()).json()) as SearchRecord[];
+    expect(body.length).toBeGreaterThan(0);
+    expect(body.every((r) => r.courseSlug === 'cyber-security-basics')).toBe(
+      true,
+    );
+    // content from other courses must not be present anywhere in the payload
+    expect(JSON.stringify(body)).not.toMatch(
+      /ROAS stands for return on ad spend/,
+    );
   });
 });

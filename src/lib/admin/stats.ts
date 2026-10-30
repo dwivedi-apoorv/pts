@@ -1,4 +1,5 @@
 import type { Course } from '../content/types';
+import { allowedSlugs } from '../access-calc';
 import { courseProgress, type CourseProgress } from '../progress-calc';
 
 export type MemberRow = {
@@ -10,6 +11,8 @@ export type MemberRow = {
   auth_user_id: string | null;
   last_login_at: string | null;
   created_at: string;
+  /** Absent until migration 0002_roles.sql has been run. */
+  role_id?: string | null;
 };
 export type ProgressRow = {
   user_id: string;
@@ -19,7 +22,15 @@ export type ProgressRow = {
 };
 export type ActivityRow = { user_id: string; at: string };
 
+/** Who may see which courses. `byRole` maps a role id to its course slugs. */
+export type AccessConfig = {
+  forEveryone: string[];
+  byRole: Record<string, string[]>;
+};
+
 export type TeamMember = MemberRow & {
+  /** Course slugs this member is assigned (admins: all). */
+  assigned: Set<string>;
   perCourse: Record<string, CourseProgress>;
   overallPercent: number;
   chaptersDone: number;
@@ -46,8 +57,10 @@ export function computeTeam(input: {
   members: MemberRow[];
   progress: ProgressRow[];
   activity: ActivityRow[];
+  /** Omit to treat every course as assigned to everyone. */
+  access?: AccessConfig;
 }): TeamMember[] {
-  const { courses, members, progress, activity } = input;
+  const { courses, members, progress, activity, access } = input;
   const done = new Map<string, Map<string, string[]>>();
   const last = new Map<string, string>();
   for (const r of progress) {
@@ -62,24 +75,37 @@ export function computeTeam(input: {
   for (const a of activity)
     last.set(a.user_id, later(last.get(a.user_id) ?? null, a.at)!);
 
-  const totalChapters = courses.reduce((n, c) => n + c.chapters.length, 0);
+  const allSlugs = courses.map((c) => c.slug);
   const first = courses[0];
 
   return members.map((m) => {
     const byCourse =
       (m.auth_user_id && done.get(m.auth_user_id)) ||
       new Map<string, string[]>();
+    const assigned = access
+      ? allowedSlugs({
+          isAdmin: m.role === 'admin',
+          allSlugs,
+          forEveryone: access.forEveryone,
+          roleCourses: (m.role_id && access.byRole[m.role_id]) || [],
+        })
+      : new Set(allSlugs);
     const perCourse: Record<string, CourseProgress> = {};
     let chaptersDone = 0;
+    let totalChapters = 0;
     let coursesCompleted = 0;
     for (const c of courses) {
       const p = courseProgress(c, byCourse.get(c.slug) ?? []);
       perCourse[c.slug] = p;
+      // Only assigned courses count towards a member's totals.
+      if (!assigned.has(c.slug)) continue;
       chaptersDone += p.done;
+      totalChapters += c.chapters.length;
       if (p.status === 'completed') coursesCompleted++;
     }
     return {
       ...m,
+      assigned,
       perCourse,
       chaptersDone,
       coursesCompleted,
@@ -90,9 +116,11 @@ export function computeTeam(input: {
         m.auth_user_id ? (last.get(m.auth_user_id) ?? null) : null,
         m.last_login_at,
       ),
-      onboardingComplete: first
-        ? perCourse[first.slug].status === 'completed'
-        : true,
+      // Onboarding only has to be finished by people it is assigned to.
+      onboardingComplete:
+        !first ||
+        !assigned.has(first.slug) ||
+        perCourse[first.slug].status === 'completed',
     };
   });
 }

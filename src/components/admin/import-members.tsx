@@ -21,7 +21,7 @@ import {
 } from '@/lib/admin/actions';
 
 const SAMPLE =
-  'email,full_name,role\nanna@example.com,Anna Smith,learner\nraj@example.com,Raj Patel,admin';
+  'email,full_name,role,job_role\nanna@example.com,Anna Smith,learner,Developer\nraj@example.com,Raj Patel,admin,';
 
 export function ImportMembersButton() {
   const [open, setOpen] = useState(false);
@@ -52,7 +52,8 @@ export function ImportMembersButton() {
             <DialogDescription>
               Paste CSV or choose a file. Columns:{' '}
               <code>email,full_name,role</code> (role is learner or admin, and
-              defaults to learner).
+              defaults to learner). Optional: <code>job_role</code>, the name of
+              an existing role to give the member.
             </DialogDescription>
           </DialogHeader>
 
@@ -108,6 +109,7 @@ export function ImportMembersButton() {
                       <th className="px-2 py-1.5">Line</th>
                       <th className="px-2 py-1.5">Email</th>
                       <th className="px-2 py-1.5">Name</th>
+                      <th className="px-2 py-1.5">Access</th>
                       <th className="px-2 py-1.5">Role</th>
                       <th className="px-2 py-1.5">Status</th>
                     </tr>
@@ -119,6 +121,7 @@ export function ImportMembersButton() {
                         <td className="px-2 py-1.5">{r.email || '—'}</td>
                         <td className="px-2 py-1.5">{r.full_name || '—'}</td>
                         <td className="px-2 py-1.5">{r.role}</td>
+                        <td className="px-2 py-1.5">{r.job_role || '—'}</td>
                         <td className="px-2 py-1.5">
                           {r.errors.length ? (
                             <span className="text-destructive">

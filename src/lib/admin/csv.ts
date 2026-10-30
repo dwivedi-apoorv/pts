@@ -48,6 +48,10 @@ export type ImportRow = {
   email: string;
   full_name: string;
   role: 'learner' | 'admin';
+  /** Role name as typed in the optional job_role column. */
+  job_role: string;
+  /** Resolved id of that role, or null when none was given. */
+  role_id: string | null;
   errors: string[];
 };
 
@@ -58,6 +62,8 @@ export const MAX_IMPORT_ROWS = 500;
 export function validateImport(
   text: string,
   existingEmails: Set<string>,
+  /** Lower-cased role name to role id. Omit when roles are not set up. */
+  rolesByName: Map<string, string> = new Map(),
 ): { rows: ImportRow[]; fatal?: string } {
   const table = parseCsv(text);
   if (table.length === 0) return { rows: [], fatal: 'The file is empty.' };
@@ -75,6 +81,7 @@ export function validateImport(
     };
   const iName = col('full_name', 'name', 'fullname');
   const iRole = col('role');
+  const iJob = col('job_role', 'jobrole', 'learning_role');
   const body = table.slice(1);
   if (body.length === 0)
     return { rows: [], fatal: 'There are no member rows under the header.' };
@@ -102,11 +109,19 @@ export function validateImport(
     if (full_name.length > 120) errors.push('Name is too long');
     if (roleRaw && roleRaw !== 'learner' && roleRaw !== 'admin')
       errors.push('Role must be learner or admin');
+    const job_role = (iJob >= 0 ? (cells[iJob] ?? '') : '').trim();
+    let role_id: string | null = null;
+    if (job_role) {
+      role_id = rolesByName.get(job_role.toLowerCase()) ?? null;
+      if (!role_id) errors.push(`Unknown role "${job_role}"`);
+    }
     return {
       line,
       email,
       full_name,
       role: roleRaw === 'admin' ? 'admin' : 'learner',
+      job_role,
+      role_id,
       errors,
     };
   });

@@ -5,7 +5,7 @@ A private, LMS-style learning site for the project management team. Each markdow
 with a one-time code sent to their email. Only emails that an admin has added can sign in.
 
 - **Stack:** Next.js 16 (App Router, Cache Components), TypeScript, Tailwind CSS v4, shadcn/ui, Supabase (Auth and Postgres with Row Level Security), Resend (sign-in emails), MiniSearch, Vitest.
-- **Content:** the markdown files are the source of truth. Edit a file, commit, redeploy. See [CONTENT.md](CONTENT.md).
+- **Content:** the markdown files are the source of truth. Admins choose which roles see which courses. Edit a file, commit, redeploy. See [CONTENT.md](CONTENT.md).
 - **Hosting:** Vercel.
 
 ## 1. Set up Supabase
@@ -13,7 +13,8 @@ with a one-time code sent to their email. Only emails that an admin has added ca
 1. Create a project at [supabase.com](https://supabase.com).
 2. Open **SQL Editor** and run, in order:
    1. [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql): tables, indexes and Row Level Security.
-   2. [`supabase/seed.sql`](supabase/seed.sql): creates the first admin. **Edit the email in this file first** if the admin is not `apoorv79@gmail.com`.
+   2. [`supabase/migrations/0002_roles.sql`](supabase/migrations/0002_roles.sql): roles and course assignment (see "Roles and courses" below). Safe to run at any time.
+   3. [`supabase/seed.sql`](supabase/seed.sql): creates the first admin. **Edit the email in this file first** if the admin is not `apoorv79@gmail.com`.
 3. Open **Authentication** and configure:
    - **Sign In / Providers, Email:** enabled. **Turn off "Allow new users to sign up"** (extra safety: accounts are created only by the app).
    - **Email OTP length:** `6`. **Email OTP expiry:** `600` seconds.
@@ -67,7 +68,21 @@ The build runs `scripts/build-content.ts` first (`prebuild`). If a markdown file
 - **Deactivate** blocks access immediately and reversibly. **Delete** removes the member and all of their progress.
 - You cannot deactivate, demote or delete yourself, and the last active admin cannot be removed.
 
-## 6. Update a course
+## 6. Roles and courses
+
+Not everyone needs every course. Admins decide who sees what, in **Admin, Roles**.
+
+- A **role** is a job role such as Developer or Finance, with a set of courses. A member has **one** role, chosen in **Members** (add, edit, or the optional `job_role` column when importing a CSV, matched by role name).
+- A course can be marked **for everyone**. It is visible to every member whatever their role, which suits company-wide courses such as cyber security and POSH.
+- A member **with no role** sees only the courses marked for everyone.
+- **Admins** always see every course. (The access level, Learner or Admin, is separate from the role.)
+- Members cannot open, search, or save progress in courses they are not assigned. Those courses do not appear in their dashboard, search results or glossary, and their address shows the normal "not found" page.
+- Progress percentages for a member count only the courses assigned to them. The admin matrix shows a dash for unassigned courses.
+- **New courses are hidden from everyone except admins** until you tick them on a role or mark them for everyone. The Roles page warns about courses nobody can see yet.
+- Deleting a role keeps its members and their progress; they just fall back to the courses for everyone.
+- Until `0002_roles.sql` has been run, the app keeps showing every course to everyone, and the Roles page tells you to run it.
+
+## 7. Update a course
 
 Replace or edit the file in `content/courses/`, commit and redeploy. To add a new course, also add an entry to
 [`content/courses.config.ts`](content/courses.config.ts). Read [CONTENT.md](CONTENT.md) first: renaming a chapter title resets its saved progress.
@@ -86,7 +101,7 @@ Replace or edit the file in `content/courses/`, commit and redeploy. To add a ne
 
 ## Tests
 
-`npm test` covers the content parser against the real course files, search and glossary, the sign-in throttle,
+`npm test` covers the content parser against the real course files, search and glossary, role-based course access, the sign-in throttle,
 `requireMember`, the progress and admin server actions, guard rails, CSV handling and a static check that every table has Row Level Security.
 
 **Row Level Security against a live database (optional).** Use a throwaway Supabase project, never production. Run the migration, then:
@@ -104,9 +119,10 @@ This creates two temporary users, checks that user B cannot read, change, delete
 3. Tick two onboarding checklist items, reload, and confirm "2 of 8 done".
 4. Answer a self-check question: show the guide, choose "Need to review", reload, and confirm the summary persists.
 5. Press `Ctrl/Cmd+K`, search `ROAS`, open a result, and check it lands on the right section.
-6. As admin, add a member. Sign in as that member (a second browser profile).
-7. Complete a chapter as the member and confirm their percentage appears in **Admin, Overview**.
-8. Deactivate the member. Reload their session: they are sent to the login page and cannot sign in again.
+6. As admin, create a role in **Admin, Roles** and choose two courses, and mark one other course for everyone.
+7. Add a member with that role. Sign in as that member (a second browser profile) and check they see exactly those three courses, can open only those, and find nothing else in search or the glossary.
+8. Complete a chapter as the member and confirm their percentage appears in **Admin, Overview**, with dashes for courses not assigned to them.
+9. Deactivate the member. Reload their session: they are sent to the login page and cannot sign in again.
 
 ## Security notes
 

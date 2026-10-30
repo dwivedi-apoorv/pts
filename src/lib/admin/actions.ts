@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { isMissingSchema } from '../access-calc';
 import { requireAdmin } from '../auth';
 import { ensureAuthUser } from '../auth/otp-deps';
 import type { Member } from '../auth/request-otp';
@@ -25,6 +26,9 @@ const name = z
   .nullable()
   .optional();
 const role = z.enum(['learner', 'admin']);
+const roleId = z.uuid().nullable().optional();
+const NEEDS_MIGRATION =
+  'Roles are not set up yet. Run supabase/migrations/0002_roles.sql in the Supabase SQL editor first.';
 const id = z.uuid();
 
 type Db = ReturnType<typeof createAdminClient>;
@@ -37,6 +41,20 @@ async function getMember(db: Db, memberId: string): Promise<Row | null> {
     .eq('id', memberId)
     .maybeSingle();
   return (data as Row | null) ?? null;
+}
+
+/** 'missing-schema' means migration 0002 has not been run. */
+async function roleExists(
+  db: Db,
+  id: string,
+): Promise<boolean | 'missing-schema'> {
+  const { data, error } = await db
+    .from('roles')
+    .select('id')
+    .eq('id', id)
+    .maybeSingle();
+  if (isMissingSchema(error)) return 'missing-schema';
+  return Boolean(data);
 }
 
 async function activeAdminIds(db: Db): Promise<string[]> {
@@ -57,14 +75,20 @@ export async function addMember(input: {
   full_name?: string | null;
   email: string;
   role: 'learner' | 'admin';
+  role_id?: string | null;
 }): Promise<AdminResult> {
   const { member: actor } = await requireAdmin();
   const parsed = z
-    .object({ full_name: name, email: emailSchema, role })
+    .object({ full_name: name, email: emailSchema, role, role_id: roleId })
     .safeParse(input);
   if (!parsed.success)
     return fail(parsed.error.issues[0]?.message ?? 'Invalid input.');
   const db = createAdminClient();
+  if (parsed.data.role_id) {
+    const found = await roleExists(db, parsed.data.role_id);
+    if (found === 'missing-schema') return fail(NEEDS_MIGRATION);
+    if (!found) return fail('That role no longer exists.');
+  }
 
   const { data, error } = await db
     .from('members')
@@ -72,6 +96,7 @@ export async function addMember(input: {
       email: parsed.data.email,
       full_name: parsed.data.full_name ?? null,
       role: parsed.data.role,
+      ...(parsed.data.role_id ? { role_id: parsed.data.role_id } : {}),
     })
     .select('id,email,active,role,auth_user_id')
     .single();
@@ -89,6 +114,7 @@ export async function addMember(input: {
   }
   await logAudit(actor, 'member.add', parsed.data.email, {
     role: parsed.data.role,
+    role_id: parsed.data.role_id ?? null,
   });
   return done(message);
 }
@@ -98,16 +124,23 @@ export async function updateMember(input: {
   full_name?: string | null;
   email: string;
   role: 'learner' | 'admin';
+  /** undefined leaves the role unchanged; null removes it. */
+  role_id?: string | null;
 }): Promise<AdminResult> {
   const { member: actor } = await requireAdmin();
   const parsed = z
-    .object({ id, full_name: name, email: emailSchema, role })
+    .object({ id, full_name: name, email: emailSchema, role, role_id: roleId })
     .safeParse(input);
   if (!parsed.success)
     return fail(parsed.error.issues[0]?.message ?? 'Invalid input.');
   const db = createAdminClient();
   const target = await getMember(db, parsed.data.id);
   if (!target) return fail('That member no longer exists.');
+  if (parsed.data.role_id) {
+    const found = await roleExists(db, parsed.data.role_id);
+    if (found === 'missing-schema') return fail(NEEDS_MIGRATION);
+    if (!found) return fail('That role no longer exists.');
+  }
 
   if (target.role === 'admin' && parsed.data.role === 'learner') {
     const blocked = checkGuardRails({
@@ -146,6 +179,9 @@ export async function updateMember(input: {
       full_name: parsed.data.full_name ?? null,
       email: parsed.data.email,
       role: parsed.data.role,
+      ...(parsed.data.role_id !== undefined
+        ? { role_id: parsed.data.role_id }
+        : {}),
     })
     .eq('id', target.id);
   if (error) {
@@ -172,6 +208,7 @@ export async function updateMember(input: {
       email: parsed.data.email,
       role: parsed.data.role,
       full_name: parsed.data.full_name ?? null,
+      role_id: parsed.data.role_id,
     },
   });
   return done('Member updated.');
@@ -255,6 +292,14 @@ export async function deleteMember(memberId: string): Promise<AdminResult> {
 
 const csvText = z.string().max(200_000, 'That file is too large.');
 
+async function roleIdsByName(db: Db): Promise<Map<string, string>> {
+  const { data, error } = await db.from('roles').select('id,name');
+  if (error) return new Map(); // roles not set up: any job_role will be reported as unknown
+  return new Map(
+    data.map((r: { id: string; name: string }) => [r.name.toLowerCase(), r.id]),
+  );
+}
+
 async function existingEmails(db: Db) {
   const { data } = await db.from('members').select('email');
   return new Set(
@@ -272,9 +317,11 @@ export async function previewImport(text: string): Promise<ImportPreview> {
   const parsed = csvText.safeParse(text);
   if (!parsed.success)
     return { ok: false, message: parsed.error.issues[0].message };
+  const db = createAdminClient();
   const { rows, fatal } = validateImport(
     parsed.data,
-    await existingEmails(createAdminClient()),
+    await existingEmails(db),
+    await roleIdsByName(db),
   );
   if (fatal) return { ok: false, message: fatal };
   return {
@@ -290,7 +337,11 @@ export async function confirmImport(text: string): Promise<AdminResult> {
   if (!parsed.success) return fail(parsed.error.issues[0].message);
   const db = createAdminClient();
   // Validate again on the server: never trust the preview the browser saw.
-  const { rows, fatal } = validateImport(parsed.data, await existingEmails(db));
+  const { rows, fatal } = validateImport(
+    parsed.data,
+    await existingEmails(db),
+    await roleIdsByName(db),
+  );
   if (fatal) return fail(fatal);
   const valid = rows
     .filter((r) => r.errors.length === 0)
@@ -301,7 +352,12 @@ export async function confirmImport(text: string): Promise<AdminResult> {
   for (const r of valid) {
     const { data, error } = await db
       .from('members')
-      .insert({ email: r.email, full_name: r.full_name || null, role: r.role })
+      .insert({
+        email: r.email,
+        full_name: r.full_name || null,
+        role: r.role,
+        ...(r.role_id ? { role_id: r.role_id } : {}),
+      })
       .select('id,email,active,role,auth_user_id')
       .single();
     if (error) continue;

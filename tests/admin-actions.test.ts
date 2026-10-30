@@ -161,6 +161,36 @@ describe('admin guard rails through the real actions', () => {
     expect(deleted).toEqual([LEARNER]);
   });
 
+  it('refuses to give a member a role that does not exist', async () => {
+    const a = await actions();
+    const res = await a.addMember({
+      email: 'new@x.com',
+      role: 'learner',
+      role_id: '00000000-0000-4000-8000-0000000000ee',
+    });
+    expect(res.ok ? '' : res.message).toMatch(/role no longer exists/);
+    const upd = await a.updateMember({
+      id: LEARNER,
+      email: 'l@x.com',
+      role: 'learner',
+      role_id: '00000000-0000-4000-8000-0000000000ee',
+    });
+    expect(upd.ok ? '' : upd.message).toMatch(/role no longer exists/);
+  });
+
+  it('rejects a malformed role id', async () => {
+    const a = await actions();
+    expect(
+      (
+        await a.addMember({
+          email: 'new@x.com',
+          role: 'learner',
+          role_id: 'not-a-uuid',
+        })
+      ).ok,
+    ).toBe(false);
+  });
+
   it('rejects malformed ids and input', async () => {
     const a = await actions();
     expect((await a.deleteMember('not-a-uuid')).ok).toBe(false);

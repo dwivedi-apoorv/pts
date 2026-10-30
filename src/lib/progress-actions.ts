@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import { getAllowedSlugs } from '@/lib/access';
 import { requireMember } from '@/lib/auth';
 import { getChapter, getCourse } from '@/lib/content';
 import { createClient } from '@/lib/supabase/server';
@@ -24,6 +25,13 @@ async function context() {
   return { userId: user.id, supabase: await createClient() };
 }
 
+/** The course, but only if it exists and is assigned to the signed-in member. */
+async function assignedCourse(slug: string) {
+  const course = getCourse(slug);
+  if (!course) return undefined;
+  return (await getAllowedSlugs()).has(course.slug) ? course : undefined;
+}
+
 function fail(message: string): ActionResult {
   return { ok: false, message };
 }
@@ -37,7 +45,7 @@ export async function setChapterComplete(
     .object({ courseSlug: slug, chapterSlug: slug, completed: z.boolean() })
     .safeParse({ courseSlug, chapterSlug, completed });
   if (!input.success) return fail('Invalid request.');
-  const course = getCourse(input.data.courseSlug);
+  const course = await assignedCourse(input.data.courseSlug);
   if (!course || !getChapter(course, input.data.chapterSlug))
     return fail('That chapter does not exist.');
 
@@ -72,7 +80,7 @@ export async function recordPosition(
     .object({ courseSlug: slug, chapterSlug: slug })
     .safeParse({ courseSlug, chapterSlug });
   if (!input.success) return fail('Invalid request.');
-  const course = getCourse(input.data.courseSlug);
+  const course = await assignedCourse(input.data.courseSlug);
   if (!course || !getChapter(course, input.data.chapterSlug))
     return fail('That chapter does not exist.');
 
@@ -102,7 +110,7 @@ export async function setChecklistItem(
     })
     .safeParse({ courseSlug, itemKey, checked });
   if (!input.success) return fail('Invalid request.');
-  const course = getCourse(input.data.courseSlug);
+  const course = await assignedCourse(input.data.courseSlug);
   const known = course?.chapters.some((c) =>
     c.checklistItems?.some((i) => i.key === input.data.itemKey),
   );
@@ -135,7 +143,7 @@ export async function setSelfCheckResult(
     })
     .safeParse({ courseSlug, questionKey, result });
   if (!input.success) return fail('Invalid request.');
-  const course = getCourse(input.data.courseSlug);
+  const course = await assignedCourse(input.data.courseSlug);
   if (!course?.knowledgeCheck.some((q) => q.key === input.data.questionKey)) {
     return fail('That question no longer exists.');
   }

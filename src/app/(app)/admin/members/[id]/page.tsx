@@ -18,7 +18,7 @@ export default async function MemberDetail({
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const detail = await loadMemberDetail(id);
   if (!detail) notFound();
-  const { courses, member: m, progress, checks } = detail;
+  const { courses, member: m, progress, checks, role, rolesEnabled } = detail;
   const completedAt = new Map(
     progress.map((p) => [`${p.course_slug}/${p.chapter_slug}`, p.completed_at]),
   );
@@ -44,6 +44,14 @@ export default async function MemberDetail({
         {!m.active && <Badge variant="outline">Inactive</Badge>}
       </div>
       <p className="text-muted-foreground text-sm">{m.email}</p>
+      {rolesEnabled && (
+        <p className="mt-1 text-sm">
+          <span className="text-muted-foreground">Role: </span>
+          {m.role === 'admin'
+            ? 'Admin (sees every course)'
+            : (role?.name ?? 'No role (only courses for everyone)')}
+        </p>
+      )}
       <dl className="mt-4 grid gap-3 sm:grid-cols-4">
         {[
           ['Overall progress', `${m.overallPercent}%`],
@@ -65,19 +73,24 @@ export default async function MemberDetail({
           const answered = course.knowledgeCheck.map((q) =>
             resultByKey.get(`${course.slug}/${q.key}`),
           );
+          const assigned = m.assigned.has(course.slug);
           const got = answered.filter((a) => a?.result === 'got_it').length;
           const review = answered.filter((a) => a?.result === 'review').length;
           return (
             <section
               key={course.slug}
-              className="bg-card rounded-xl border p-4"
+              className={`bg-card rounded-xl border p-4 ${assigned ? '' : 'opacity-60'}`}
               aria-labelledby={`c-${course.slug}`}
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 id={`c-${course.slug}`} className="font-semibold">
                   {course.title}
                 </h3>
-                <StatusChip status={p.status} />
+                {assigned ? (
+                  <StatusChip status={p.status} />
+                ) : (
+                  <Badge variant="outline">Not assigned</Badge>
+                )}
               </div>
               <div className="mt-3 flex items-center gap-3">
                 <ProgressBar

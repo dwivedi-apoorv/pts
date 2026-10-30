@@ -222,6 +222,19 @@ export default async function AdminOverview({
                       </span>
                     </th>
                     {courses.map((c) => {
+                      if (!m.assigned.has(c.slug)) {
+                        return (
+                          <td
+                            key={c.slug}
+                            className="text-muted-foreground p-1 text-center"
+                            title="Not assigned to this member"
+                          >
+                            <span aria-label={`${c.title}: not assigned`}>
+                              —
+                            </span>
+                          </td>
+                        );
+                      }
                       const p = m.perCourse[c.slug].percent;
                       return (
                         <td key={c.slug} className="p-1 text-center">
@@ -260,7 +273,8 @@ export default async function AdminOverview({
         )}
         <p className="text-muted-foreground mt-2 text-xs">
           Colour bands: 0% grey, 1 to 33% red, 34 to 66% amber, 67 to 99% light
-          green, 100% green.
+          green, 100% green. A dash means the course is not assigned to that
+          member. Percentages only count assigned courses.
         </p>
       </section>
     </main>

@@ -123,6 +123,7 @@ If Word changes straight quotes to curly quotes that is fine. What Word can brea
 2. Add an entry to `content/courses.config.ts`: `file`, a unique `slug`, `order`, a one-sentence `description`, and optionally a `badge`.
 3. Add the expected chapter count to `tests/fixtures/expected-chapters.json` so the test suite covers it.
 4. Run `npm run build:content` and `npm test`.
+5. After deploying, open **Admin, Roles** and either mark the course "for everyone" or tick it on the roles that need it. Until then only admins can see it.
 
 A `.md` file that is not listed in the config, or a config entry whose file is missing, fails the build.
 
