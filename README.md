@@ -78,6 +78,7 @@ Not everyone needs every course. Admins decide who sees what, in **Admin, Roles*
 - **Admins** always see every course. (The access level, Learner or Admin, is separate from the role.)
 - Members cannot open, search, or save progress in courses they are not assigned. Those courses do not appear in their dashboard, search results or glossary, and their address shows the normal "not found" page.
 - Progress percentages for a member count only the courses assigned to them. The admin matrix shows a dash for unassigned courses.
+- To mark all the company-wide courses (cyber security, POSH, code of conduct, privacy, HR policies and so on) "for everyone" at once, run [`supabase/optional-courses-for-everyone.sql`](supabase/optional-courses-for-everyone.sql) in the SQL editor, or tick them in Admin, Roles.
 - **New courses are hidden from everyone except admins** until you tick them on a role or mark them for everyone. The Roles page warns about courses nobody can see yet.
 - Deleting a role keeps its members and their progress; they just fall back to the courses for everyone.
 - Until `0002_roles.sql` has been run, the app keeps showing every course to everyone, and the Roles page tells you to run it.
