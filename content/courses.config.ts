@@ -64,4 +64,11 @@ export const courseConfig: CourseConfig[] = [
     description:
       'For everyone in the organisation: stay safe from phishing, malware and scams, handle passwords and client access properly, and know how to report an incident.',
   },
+  {
+    file: 'posh-awareness-for-everyone.md',
+    slug: 'posh-awareness',
+    order: 9,
+    description:
+      'For everyone: what sexual harassment is, what the POSH Act requires, and how to act, report and support others, with a clear guide to the Internal Committee process.',
+  },
 ];

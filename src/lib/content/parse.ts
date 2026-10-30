@@ -369,7 +369,7 @@ export function parseCourse(
     let markdownLines = scan.keep;
     let qa: Chapter['qa'];
     if (scan.hasGlossary || scan.hasCheck) kind = 'glossary-check';
-    else if (/client questions/i.test(chTitle)) {
+    else if (/\b(client|employee|common) questions\b/i.test(chTitle)) {
       const parsed = parseQa(file, scan.keep);
       if (parsed) {
         kind = 'qa';

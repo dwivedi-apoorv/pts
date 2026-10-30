@@ -75,9 +75,9 @@ Exactly two columns, with a header row and a separator row. Terms from all cours
 - Both can sit in any chapter, but normally live in the last one.
 - Editing a question's wording resets that learner's saved result for that question only (saved results are tied to the question text).
 
-### Client questions (accordion)
+### Client, employee or common questions (accordion)
 
-A chapter whose title contains "client questions" is shown as an accordion:
+A chapter whose title contains "client questions", "employee questions" or "common questions" is shown as an accordion:
 
 ```markdown
 ## 12. Client questions and sample answers

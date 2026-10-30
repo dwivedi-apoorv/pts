@@ -35,21 +35,23 @@ export function runSearch(
 ): SearchHit[] {
   const q = query.trim();
   if (q.length < 2) return [];
-  return index
-    .search(q)
-    .slice(0, limit)
-    .map((r) => ({
-      id: r.id,
-      courseSlug: r.courseSlug,
-      courseTitle: r.courseTitle,
-      chapterSlug: r.chapterSlug,
-      chapterTitle: r.chapterTitle,
-      headingId: r.headingId,
-      heading: r.heading,
-      text: r.text,
-      score: r.score,
-      terms: r.terms,
-    }));
+  // Exact and prefix matches come first. Fuzzy (typo-tolerant) matches are
+  // only appended after them, so a near-miss word never outranks a real hit.
+  const exact = index.search(q, { fuzzy: false });
+  const seen = new Set(exact.map((r) => r.id));
+  const fuzzy = index.search(q).filter((r) => !seen.has(r.id));
+  return [...exact, ...fuzzy].slice(0, limit).map((r) => ({
+    id: r.id,
+    courseSlug: r.courseSlug,
+    courseTitle: r.courseTitle,
+    chapterSlug: r.chapterSlug,
+    chapterTitle: r.chapterTitle,
+    headingId: r.headingId,
+    heading: r.heading,
+    text: r.text,
+    score: r.score,
+    terms: r.terms,
+  }));
 }
 
 /** Keeps rank order but caps hits per course so one course cannot fill the list. */

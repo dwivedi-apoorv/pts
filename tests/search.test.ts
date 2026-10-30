@@ -44,14 +44,21 @@ describe('search', () => {
     ).toBe(true);
   });
 
-  it('finds reconciliation in the analytics course', () => {
+  it('finds reconciliation in the analytics course, ranked before near matches', () => {
     const hits = runSearch(index, 'reconciliation');
     expect(hits.length).toBeGreaterThan(0);
+    const exact = (h: (typeof hits)[number]) =>
+      `${h.heading} ${h.text}`.toLowerCase().includes('reconciliation');
+    // Fuzzy matching may add weaker near-matches (for example "conciliation"),
+    // but every exact match must come first and be in the analytics course.
+    const firstNonExact = hits.findIndex((h) => !exact(h));
+    const exactHits =
+      firstNonExact === -1 ? hits : hits.slice(0, firstNonExact);
+    expect(exactHits.length).toBeGreaterThan(0);
     expect(
-      hits.every((h) =>
-        `${h.heading} ${h.text}`.toLowerCase().includes('reconcil'),
-      ),
+      exactHits.every((h) => h.courseSlug === 'analytics-reporting-basics'),
     ).toBe(true);
+    expect(hits.filter(exact)).toHaveLength(exactHits.length);
   });
 
   it('matches prefixes and tolerates a typo in longer words', () => {

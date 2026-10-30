@@ -66,7 +66,10 @@ describe('real course files', () => {
     for (const c of courses.filter(
       (c) => c.slug !== 'project-management-onboarding',
     )) {
-      const ch = c.chapters.find((x) => /client questions/i.test(x.title))!;
+      const ch = c.chapters.find((x) =>
+        /questions and sample answers/i.test(x.title),
+      )!;
+      expect(ch, c.slug).toBeTruthy();
       expect(ch.kind).toBe('qa');
       expect(ch.qa!.length).toBeGreaterThanOrEqual(20);
     }
