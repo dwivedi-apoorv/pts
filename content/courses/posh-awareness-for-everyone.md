@@ -1,4 +1,4 @@
-# POSH Awareness for Everyone: Preventing Sexual Harassment at Work
+# POSH Awareness: Preventing Sexual Harassment at Work
 
 This module is for everyone in the organisation, whatever your role or seniority. It explains what sexual harassment is, what India's POSH Act (the Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013) requires, how to act if you experience, see or hear about it, and how a complaint is handled. It is written for non-specialists in plain language and uses examples from a digital agency and its clients. It is general information and not legal advice, and it does not replace the organisation's own POSH policy.
 

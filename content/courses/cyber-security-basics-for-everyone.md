@@ -1,4 +1,4 @@
-# Cyber Security Basics for Everyone
+# Cyber Security Basics
 
 This module is for everyone in the organisation, whatever your role. It gives you the everyday cyber security knowledge needed to protect yourself, your colleagues and our clients: how to spot phishing and scams, avoid malware and ransomware, handle passwords and client access safely, and report an incident quickly and calmly. It is written for non-specialists and uses online store examples. It does not describe our internal process in full; see the main onboarding module for that.
 
