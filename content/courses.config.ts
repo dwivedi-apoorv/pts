@@ -174,4 +174,11 @@ export const courseConfig: CourseConfig[] = [
     description:
       'Read data correctly, spot problems in reports, build clear client reports and explain numbers without overpromising.',
   },
+  {
+    file: 'test-course.md',
+    slug: 'test',
+    order: 20,
+    category: 'Role Training',
+    description: 'A throwaway course for checking things. Safe to delete.',
+  },
 ];
