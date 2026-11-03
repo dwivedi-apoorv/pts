@@ -89,7 +89,7 @@ export default async function Dashboard() {
 
       <section aria-labelledby="courses" className="mt-10">
         <h2 id="courses" className="text-lg font-semibold">
-          Your courses
+          Training modules
         </h2>
         <p className="text-muted-foreground mt-1 text-sm">
           Company-wide policies come first, then training for your role. Work

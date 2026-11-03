@@ -729,7 +729,7 @@ Raise an urgent request with your manager and [IT head]. In genuine emergencies 
 **25. I am travelling alone and do not feel safe in the cheapest hotel. What should I do?**
 Choose a safer option and tell your manager. Safety comes before savings. Add a short note to your claim. See Health, Safety and Wellbeing for Everyone.
 
-## 17. Glossary and knowledge check
+## 17. Glossary
 
 **Glossary**
 

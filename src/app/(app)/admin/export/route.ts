@@ -1,6 +1,6 @@
 import { logAudit } from '@/lib/admin/audit';
 import { toCsv } from '@/lib/admin/csv';
-import { loadSelfCheckAll, loadTeam } from '@/lib/admin/data';
+import { loadTeam } from '@/lib/admin/data';
 import { requireAdmin } from '@/lib/auth';
 
 const file = (name: string, body: string) =>
@@ -47,39 +47,5 @@ export async function GET(request: Request) {
     return file(`progress-${stamp}.csv`, toCsv(rows));
   }
 
-  if (type === 'selfcheck') {
-    const { members, rows, courses } = await loadSelfCheckAll();
-    const byUser = new Map(
-      members.filter((m) => m.auth_user_id).map((m) => [m.auth_user_id!, m]),
-    );
-    const out: unknown[][] = [
-      [
-        'Name',
-        'Email',
-        'Course',
-        'Question number',
-        'Question',
-        'Result (self-reported)',
-        'Updated',
-      ],
-    ];
-    for (const r of rows) {
-      const m = byUser.get(r.user_id);
-      const course = courses.find((c) => c.slug === r.course_slug);
-      const q = course?.knowledgeCheck.find((k) => k.key === r.question_key);
-      out.push([
-        m?.full_name ?? '',
-        m?.email ?? '(deleted member)',
-        course?.title ?? r.course_slug,
-        q?.number ?? '',
-        q?.question ?? '(question was edited or removed)',
-        r.result === 'got_it' ? 'Got it' : 'Need to review',
-        r.updated_at,
-      ]);
-    }
-    await logAudit(actor, 'export.selfcheck', null, { rows: rows.length });
-    return file(`self-check-${stamp}.csv`, toCsv(out));
-  }
-
-  return new Response('Use ?type=progress or ?type=selfcheck', { status: 400 });
+  return new Response('Use ?type=progress', { status: 400 });
 }

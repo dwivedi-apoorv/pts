@@ -624,7 +624,7 @@ Contact [security contact] straight away. Speed matters more than process. Follo
 **24. How do I raise a concern about discrimination?**
 Use [HR contact] or [ethics contact], or the formal grievance procedure if it affects you personally. See Code of Conduct and Ethics for Everyone for the standards of behaviour we expect.
 
-## 17. Glossary and knowledge check
+## 17. Glossary
 
 **Glossary**
 

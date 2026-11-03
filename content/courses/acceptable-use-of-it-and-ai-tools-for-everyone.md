@@ -665,7 +665,7 @@ Honest, prompt reports are treated as a positive step, usually leading to a fix 
 **22. I am a manager and my team wants to use a new AI tool for a deadline. What do I do?**
 Do not allow it until it is approved. Raise it with [IT contact], who can fast-track urgent requests. Meanwhile, suggest approved tools or manual work.
 
-## 15. Glossary and knowledge check
+## 15. Glossary
 
 **Glossary**
 

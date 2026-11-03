@@ -621,7 +621,7 @@ Yes, please. They are short and nobody is graded. They show gaps while the stake
 **20. What happens after an incident?**
 We recover, check for hidden damage, tell clients it is resolved, and hold a short review without blame. The lessons go into a shared log, and the playbooks are updated.
 
-## 17. Glossary and knowledge check
+## 17. Glossary
 
 **Glossary**
 

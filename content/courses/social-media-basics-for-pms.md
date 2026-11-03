@@ -346,7 +346,7 @@ Brand assets, product information and photos, quick approvals, news about launch
 **22. Why are the follower and click numbers in your report different from our own tools?**
 Platforms and analytics tools measure in different ways, so numbers rarely match exactly. We use the same source each month so the trends are reliable, and we explain the definitions in the report.
 
-## 15. Glossary and knowledge check
+## 15. Glossary
 
 **Glossary**
 

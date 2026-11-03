@@ -39,7 +39,6 @@ export default async function CoursePage({
   const progress = courseProgress(course, all.completed[course.slug] ?? []);
   const last = all.positions.find((p) => p.course === course.slug)?.chapter;
   const target = continueChapter(course, progress, last);
-  const checkChapter = course.chapters.find((c) => c.kind === 'glossary-check');
 
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-8">
@@ -79,19 +78,6 @@ export default async function CoursePage({
             ? 'Review course'
             : 'Continue'}
       </Link>
-
-      {progress.status === 'completed' && checkChapter && (
-        <p className="bg-card mt-5 rounded-lg border p-4 text-sm">
-          You have completed every chapter. Nice work.{' '}
-          <Link
-            href={`/courses/${course.slug}/${checkChapter.slug}#knowledge-check`}
-            className="text-primary font-medium underline"
-          >
-            Try the knowledge check
-          </Link>{' '}
-          to test yourself.
-        </p>
-      )}
 
       <h2 className="mt-10 text-lg font-semibold">Chapters</h2>
       <ol className="mt-3 divide-y rounded-xl border">

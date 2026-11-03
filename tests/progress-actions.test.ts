@@ -73,7 +73,6 @@ async function realKeys() {
     course,
     chapter: course.chapters[0],
     item,
-    question: course.knowledgeCheck[0],
   };
 }
 
@@ -107,7 +106,7 @@ describe('progress actions', () => {
     expect(calls[0].filters).toContainEqual(['user_id', 'session-user']);
   });
 
-  it('rejects unknown courses, chapters, items and questions without writing', async () => {
+  it('rejects unknown courses, chapters, items without writing', async () => {
     const a = await actions();
     const { course, chapter } = await realKeys();
     expect((await a.setChapterComplete('nope', chapter.slug, true)).ok).toBe(
@@ -120,16 +119,13 @@ describe('progress actions', () => {
     expect((await a.setChecklistItem(course.slug, 'deadbeef', true)).ok).toBe(
       false,
     );
-    expect(
-      (await a.setSelfCheckResult(course.slug, '1-deadbeef', 'got_it')).ok,
-    ).toBe(false);
     expect(calls).toHaveLength(0);
   });
 
   it('refuses to save progress for a course that is not assigned to the member', async () => {
     allowedSlugs = ['seo-basics'];
     const a = await actions();
-    const { course, chapter, item, question } = await realKeys(); // the first course, onboarding
+    const { course, chapter, item } = await realKeys(); // the first course, onboarding
     expect(course.slug).toBe('project-management-onboarding');
     expect(
       (await a.setChapterComplete(course.slug, chapter.slug, true)).ok,
@@ -138,9 +134,6 @@ describe('progress actions', () => {
     expect((await a.setChecklistItem(course.slug, item.key, true)).ok).toBe(
       false,
     );
-    expect(
-      (await a.setSelfCheckResult(course.slug, question.key, 'got_it')).ok,
-    ).toBe(false);
     expect(calls).toHaveLength(0);
   });
 
@@ -148,31 +141,21 @@ describe('progress actions', () => {
     const a = await actions();
     const { course, chapter } = await realKeys();
     expect(
-      (await a.setSelfCheckResult(course.slug, 'x', 'maybe' as never)).ok,
-    ).toBe(false);
-    expect(
       (await a.setChapterComplete(course.slug, chapter.slug, 'yes' as never))
         .ok,
     ).toBe(false);
     expect((await a.setChapterComplete('', '', true)).ok).toBe(false);
   });
 
-  it('saves a checklist tick and a self-check result', async () => {
+  it('saves a checklist tick', async () => {
     const a = await actions();
-    const { course, item, question } = await realKeys();
+    const { course, item } = await realKeys();
     expect(await a.setChecklistItem(course.slug, item.key, true)).toEqual({
       ok: true,
     });
-    expect(
-      await a.setSelfCheckResult(course.slug, question.key, 'review'),
-    ).toEqual({ ok: true });
     expect(calls[0]).toMatchObject({
       table: 'checklist_items',
       payload: { user_id: 'session-user', checked: true },
-    });
-    expect(calls[1]).toMatchObject({
-      table: 'self_check_results',
-      payload: { result: 'review' },
     });
   });
 

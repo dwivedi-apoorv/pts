@@ -18,12 +18,9 @@ export default async function MemberDetail({
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const detail = await loadMemberDetail(id);
   if (!detail) notFound();
-  const { courses, member: m, progress, checks, role, rolesEnabled } = detail;
+  const { courses, member: m, progress, role, rolesEnabled } = detail;
   const completedAt = new Map(
     progress.map((p) => [`${p.course_slug}/${p.chapter_slug}`, p.completed_at]),
-  );
-  const resultByKey = new Map(
-    checks.map((c) => [`${c.course_slug}/${c.question_key}`, c]),
   );
 
   return (
@@ -70,12 +67,7 @@ export default async function MemberDetail({
       <div className="mt-3 space-y-4">
         {courses.map((course) => {
           const p = m.perCourse[course.slug];
-          const answered = course.knowledgeCheck.map((q) =>
-            resultByKey.get(`${course.slug}/${q.key}`),
-          );
           const assigned = m.assigned.has(course.slug);
-          const got = answered.filter((a) => a?.result === 'got_it').length;
-          const review = answered.filter((a) => a?.result === 'review').length;
           return (
             <section
               key={course.slug}
@@ -137,47 +129,6 @@ export default async function MemberDetail({
                   })}
                 </ol>
               </details>
-
-              {course.knowledgeCheck.length > 0 && (
-                <details className="mt-3">
-                  <summary className="cursor-pointer text-sm font-medium">
-                    Self-check (self-reported): {got} got it, {review} to
-                    review, {course.knowledgeCheck.length - got - review} not
-                    attempted
-                  </summary>
-                  <ol className="mt-2 divide-y rounded-lg border">
-                    {course.knowledgeCheck.map((q, i) => {
-                      const a = answered[i];
-                      return (
-                        <li
-                          key={q.key}
-                          className="flex items-start gap-2 px-3 py-1.5 text-sm"
-                        >
-                          <span className="text-muted-foreground w-6 tabular-nums">
-                            {q.number}.
-                          </span>
-                          <span className="flex-1">{q.question}</span>
-                          <Badge
-                            variant={
-                              a?.result === 'got_it'
-                                ? 'default'
-                                : a
-                                  ? 'secondary'
-                                  : 'outline'
-                            }
-                          >
-                            {a
-                              ? a.result === 'got_it'
-                                ? 'Got it'
-                                : 'To review'
-                              : 'Not attempted'}
-                          </Badge>
-                        </li>
-                      );
-                    })}
-                  </ol>
-                </details>
-              )}
             </section>
           );
         })}

@@ -495,7 +495,7 @@ Yes, many stores do. It lowers the need for stock, but you depend on suppliers f
 **22. Can you copy another store's design or products?**
 We can take inspiration from other stores, such as layouts and ideas, but we do not copy another store's content, images or branding. It can cause legal problems, and it rarely works as well as a store built around your own brand.
 
-## 15. Glossary and knowledge check
+## 15. Glossary
 
 **Glossary**
 

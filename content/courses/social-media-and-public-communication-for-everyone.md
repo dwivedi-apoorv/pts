@@ -649,7 +649,7 @@ Only if it can be proven. Otherwise suggest honest claims, such as specific feat
 **22. Is it fine to take part in an online poll or expert call with a research firm?**
 Only if you can answer without sharing client, pricing or internal information. Tell your manager first.
 
-## 16. Glossary and knowledge check
+## 16. Glossary
 
 **Glossary**
 

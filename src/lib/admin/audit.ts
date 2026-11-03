@@ -12,8 +12,7 @@ export type AuditAction =
   | 'role.update'
   | 'role.delete'
   | 'course.everyone'
-  | 'export.progress'
-  | 'export.selfcheck';
+  | 'export.progress';
 
 /** Best effort: a failed audit write is logged but never blocks the action itself. */
 export async function logAudit(

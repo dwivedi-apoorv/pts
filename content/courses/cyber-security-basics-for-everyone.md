@@ -549,7 +549,7 @@ Take it seriously. Ask the customer to forward the email, and not to click anyth
 **22. How should we set up our team's access to our store?**
 Give each person their own login, with only the permissions they need. Turn on sign-in codes for everyone. Review the staff list every few months and remove people who have left. Keep the owner account for as few people as possible. We can walk through your staff list with you.
 
-## 16. Glossary and knowledge check
+## 16. Glossary
 
 **Glossary**
 

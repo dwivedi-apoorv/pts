@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { GlossaryTable } from '@/components/glossary-table';
-import { KnowledgeCheck } from '@/components/knowledge-check';
 import { LessonFooter } from '@/components/lesson-footer';
 import { PositionTracker } from '@/components/position-tracker';
 import { LessonMarkdown } from '@/components/lesson-markdown';
@@ -11,11 +10,7 @@ import { MobileToc, Toc, type TocItem } from '@/components/toc';
 import { getAllowedSlugs, requireCourseAccess } from '@/lib/access';
 import { requireMember } from '@/lib/auth';
 import { getChapter, getCourse, getCourses } from '@/lib/content';
-import {
-  getChecklistState,
-  getSelfCheck,
-  getUserProgress,
-} from '@/lib/progress';
+import { getChecklistState, getUserProgress } from '@/lib/progress';
 
 export function generateStaticParams() {
   return getCourses().flatMap((c) =>
@@ -45,13 +40,10 @@ export default async function LessonPage({
   await requireCourseAccess(course.slug);
   const { chapter, prev, next } = found;
 
-  const [progress, checklistState, selfCheck] = await Promise.all([
+  const [progress, checklistState] = await Promise.all([
     getUserProgress(user.id),
     chapter.checklistItems?.length
       ? getChecklistState(user.id, course.slug)
-      : {},
-    chapter.kind === 'glossary-check' && course.knowledgeCheck.length
-      ? getSelfCheck(user.id, course.slug)
       : {},
   ]);
   const completed = (progress.completed[course.slug] ?? []).includes(
@@ -63,11 +55,8 @@ export default async function LessonPage({
     text: h.text,
     level: h.level,
   }));
-  if (chapter.kind === 'glossary-check') {
-    if (course.glossary.length)
-      toc.push({ id: 'glossary', text: 'Glossary', level: 2 });
-    if (course.knowledgeCheck.length)
-      toc.push({ id: 'knowledge-check', text: 'Knowledge check', level: 2 });
+  if (chapter.kind === 'glossary-check' && course.glossary.length) {
+    toc.push({ id: 'glossary', text: 'Glossary', level: 2 });
   }
   const href = (slug: string) => `/courses/${course.slug}/${slug}`;
 
@@ -123,31 +112,20 @@ export default async function LessonPage({
             </div>
           )}
 
-          {chapter.kind === 'glossary-check' && (
-            <>
-              {course.glossary.length > 0 && (
-                <section
-                  id="glossary"
-                  aria-labelledby="glossary-title"
-                  className="mt-10 scroll-mt-20"
-                >
-                  <h2
-                    id="glossary-title"
-                    className="mb-3 text-xl font-semibold tracking-tight"
-                  >
-                    Glossary
-                  </h2>
-                  <GlossaryTable entries={course.glossary} />
-                </section>
-              )}
-              {course.knowledgeCheck.length > 0 && (
-                <KnowledgeCheck
-                  courseSlug={course.slug}
-                  questions={course.knowledgeCheck}
-                  initial={selfCheck}
-                />
-              )}
-            </>
+          {chapter.kind === 'glossary-check' && course.glossary.length > 0 && (
+            <section
+              id="glossary"
+              aria-labelledby="glossary-title"
+              className="mt-10 scroll-mt-20"
+            >
+              <h2
+                id="glossary-title"
+                className="mb-3 text-xl font-semibold tracking-tight"
+              >
+                Glossary
+              </h2>
+              <GlossaryTable entries={course.glossary} />
+            </section>
           )}
         </div>
 

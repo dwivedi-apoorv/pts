@@ -908,7 +908,7 @@ Not without checking. Personal benefits from vendors can create a conflict of in
 **24. Where do I report sexual harassment?**
 To the Internal Committee, as explained in **POSH Awareness for Everyone**. [IC contact]. You can also talk to [HR contact] for support.
 
-## 17. Glossary and knowledge check
+## 17. Glossary
 
 **Glossary**
 

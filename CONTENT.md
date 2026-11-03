@@ -23,7 +23,7 @@ Intro paragraph(s). Everything before the first "##" is the course intro.
 ## 1. Chapter title                  <- each ## is a chapter (lesson)
 ### Optional subheading              <- ### shows in the "On this page" list
 ...
-## 13. Glossary and knowledge check  <- usually the last chapter
+## 13. Glossary  <- usually the last chapter
 ```
 
 - Use **one** `#` title. A second `#` outside a code block is an error.

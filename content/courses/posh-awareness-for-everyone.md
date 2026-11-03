@@ -603,7 +603,7 @@ Concerns can be raised informally with the IC or HR, and small matters are often
 **24. What if a complaint turns out to be false?**
 Action can be taken if an inquiry finds that a complaint was knowingly false or malicious, or that evidence was forged. This is rare, and it is different from a complaint that simply cannot be proved. Real complaints should never be discouraged.
 
-## 17. Glossary and knowledge check
+## 17. Glossary
 
 **Glossary**
 

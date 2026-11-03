@@ -602,7 +602,7 @@ We do not recommend it. Search engines' guidelines restrict paid links and link 
 **30. Why do the backlink numbers differ between Ahrefs, Semrush and Search Console?**
 Each tool finds links with its own crawler, so each sees a different set. We choose one tool for tracking, name it in the report, and compare the same tool month to month.
 
-## 17. Glossary and knowledge check
+## 17. Glossary
 
 **Glossary**
 

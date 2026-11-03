@@ -814,7 +814,7 @@ Start with the project manager, who knows who should help. The who-is-who table 
 **22. Will the culture change over time?**
 Yes, as the company grows. We use surveys, retrospectives and town halls to adjust, and your input matters.
 
-## 17. Glossary and knowledge check
+## 17. Glossary
 
 **Glossary**
 

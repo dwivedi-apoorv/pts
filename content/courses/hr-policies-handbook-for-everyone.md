@@ -762,7 +762,7 @@ Yes. Your UAN stays with you. Give it to HR when you join, and transfer your bal
 **25. How will I know if a policy changes?**
 By email and on [the intranet], at least [14 days] before it takes effect, unless the law requires a faster change. Ask HR if you are unsure how it affects you.
 
-## 17. Glossary and knowledge check
+## 17. Glossary
 
 **Glossary**
 

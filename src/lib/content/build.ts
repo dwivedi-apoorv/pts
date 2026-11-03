@@ -69,9 +69,8 @@ export function buildSearchRecords(courses: Course[]): SearchRecord[] {
       }
       flush();
 
-      // Q&A questions get anchors "q-<number>"; glossary and knowledge check
-      // use "glossary" and "knowledge-check". The lesson reader must render
-      // those ids.
+      // Q&A questions get anchors "q-<number>"; the glossary uses "glossary".
+      // The lesson reader must render those ids.
       for (const q of ch.qa ?? []) {
         const answer = clean(plainText(parseMarkdown(q.answerMarkdown)));
         records.push({
@@ -91,17 +90,6 @@ export function buildSearchRecords(courses: Course[]): SearchRecord[] {
             heading: 'Glossary',
             text: course.glossary
               .map((g) => `${g.term}: ${g.meaning}`)
-              .join(' '),
-          });
-        }
-        if (course.knowledgeCheck.length) {
-          records.push({
-            ...base,
-            id: `${idBase}#knowledge-check`,
-            headingId: 'knowledge-check',
-            heading: 'Knowledge check',
-            text: course.knowledgeCheck
-              .map((q) => `${q.question} ${q.answer ?? ''}`)
               .join(' '),
           });
         }

@@ -363,7 +363,7 @@ Report on two things: the work we did, and the results it produced. Always recor
 
 **Monthly report structure:** one-line summary, results against baseline, work completed, what we learned, plan for next month, anything we need from the client.
 
-## 10. Onboarding checklist, knowledge check and glossary
+## 10. Onboarding checklist and glossary
 
 **First-two-weeks checklist**
 

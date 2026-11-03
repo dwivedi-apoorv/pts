@@ -253,17 +253,3 @@ export async function loadMemberDetail(id: string) {
     rolesEnabled: rolesData.enabled,
   };
 }
-
-export async function loadSelfCheckAll() {
-  const db = createAdminClient();
-  const [members, rows] = await Promise.all([
-    fetchAll<MemberRow>(db, 'members', MEMBER_COLS, 'created_at'),
-    fetchAll<SelfCheckRow>(
-      db,
-      'self_check_results',
-      'user_id,course_slug,question_key,result,updated_at',
-      'updated_at',
-    ),
-  ]);
-  return { members, rows, courses: getCourses() };
-}

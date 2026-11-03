@@ -395,7 +395,7 @@ Information about your products and customers, access to subject experts, exampl
 **22. Do we own the content you create?**
 Ownership is set out in your agreement. As a general rule, the final published content is yours, and we use only original work or properly licensed material.
 
-## 15. Glossary and knowledge check
+## 15. Glossary
 
 **Glossary**
 

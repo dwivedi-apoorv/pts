@@ -299,7 +299,7 @@ Quick access and approvals, accurate product information, help with brand and pr
 **22. How do I know the work is actually being done?**
 We share a plan at the start, a regular progress update, and a monthly report showing the work completed and the results against your baseline. You can always ask us to explain any item in more detail.
 
-## 13. Glossary and knowledge check
+## 13. Glossary
 
 **Glossary**
 

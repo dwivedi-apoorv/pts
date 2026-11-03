@@ -129,35 +129,3 @@ export async function setChecklistItem(
   );
   return error ? FAIL : { ok: true };
 }
-
-export async function setSelfCheckResult(
-  courseSlug: string,
-  questionKey: string,
-  result: 'got_it' | 'review',
-): Promise<ActionResult> {
-  const input = z
-    .object({
-      courseSlug: slug,
-      questionKey: z.string().min(1).max(64),
-      result: z.enum(['got_it', 'review']),
-    })
-    .safeParse({ courseSlug, questionKey, result });
-  if (!input.success) return fail('Invalid request.');
-  const course = await assignedCourse(input.data.courseSlug);
-  if (!course?.knowledgeCheck.some((q) => q.key === input.data.questionKey)) {
-    return fail('That question no longer exists.');
-  }
-
-  const { userId, supabase } = await context();
-  const { error } = await supabase.from('self_check_results').upsert(
-    {
-      user_id: userId,
-      course_slug: course.slug,
-      question_key: input.data.questionKey,
-      result: input.data.result,
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: 'user_id,course_slug,question_key' },
-  );
-  return error ? FAIL : { ok: true };
-}

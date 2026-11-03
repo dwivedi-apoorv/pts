@@ -757,7 +757,7 @@ Only what the client has made public or approved in writing. Never share unrelea
 **22. Will I get in trouble if I report my own mistake?**
 Not for an honest mistake reported quickly. The company wants early reports. Concealing a mistake or ignoring a request is what leads to disciplinary action.
 
-## 16. Glossary and knowledge check
+## 16. Glossary
 
 **Glossary**
 

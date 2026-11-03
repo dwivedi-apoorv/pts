@@ -99,8 +99,7 @@ describe('search', () => {
       expect(href).toBe(
         `/courses/${r.courseSlug}/${r.chapterSlug}#${r.headingId}`,
       );
-      const special =
-        r.headingId === 'glossary' || r.headingId === 'knowledge-check';
+      const special = r.headingId === 'glossary';
       const qa = /^q-(\d+)$/.exec(r.headingId);
       if (special) expect(chapter.kind, r.id).toBe('glossary-check');
       else if (qa)

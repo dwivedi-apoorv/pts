@@ -1,4 +1,4 @@
-# Performance Marketing Basics for Project Managers
+# Performance Marketing Basics
 
 This module gives project managers enough knowledge of paid advertising, mainly Google Ads and Meta Ads (Facebook and Instagram), to follow what a performance marketer is saying, read the numbers, and answer client questions without overpromising. It teaches the terms and formulas you will hear every week, such as CPC, CTR and ROAS. It is written for non-specialists and uses online store examples. It does not describe our internal process; see the main onboarding module for that.
 
@@ -362,7 +362,7 @@ It is best practice that the client owns their ad accounts, product feed and tra
 **22. How will I know what is happening?**
 We share regular updates, and a monthly report that covers spend, results against the agreed target, what we learned, what we tested, and the plan for the next month.
 
-## 13. Glossary and knowledge check
+## 13. Glossary
 
 **Glossary**
 

@@ -39,8 +39,6 @@ export const getUserProgress = cache(
   },
 );
 
-export type SelfCheckResult = 'got_it' | 'review';
-
 /** Saved checklist ticks for one course: item key -> checked. */
 export const getChecklistState = cache(
   async (
@@ -55,24 +53,5 @@ export const getChecklistState = cache(
       .eq('course_slug', courseSlug);
     if (error) throw error;
     return Object.fromEntries(data.map((r) => [r.item_key, r.checked]));
-  },
-);
-
-/** Saved self-check answers for one course: question key -> result. */
-export const getSelfCheck = cache(
-  async (
-    userId: string,
-    courseSlug: string,
-  ): Promise<Record<string, SelfCheckResult>> => {
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from('self_check_results')
-      .select('question_key,result')
-      .eq('user_id', userId)
-      .eq('course_slug', courseSlug);
-    if (error) throw error;
-    return Object.fromEntries(
-      data.map((r) => [r.question_key, r.result as SelfCheckResult]),
-    );
   },
 );

@@ -771,7 +771,7 @@ You do not have to put up with it. End the call politely, write down what happen
 **20. I have been unwell for a long time and I am coming back. What happens?**
 Speak to HR and your manager before your return. They will agree a plan for hours, tasks and adjustments, and review it. You do not need to share more medical detail than is needed.
 
-## 17. Glossary and knowledge check
+## 17. Glossary
 
 **Glossary**
 
