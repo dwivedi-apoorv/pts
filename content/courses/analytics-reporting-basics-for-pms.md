@@ -1,5 +1,4 @@
-# Analytics and Reporting Basics for Project Managers
-
+# Analytics and Reporting Basics
 This module gives project managers enough knowledge of analytics and reporting to read data correctly, spot problems in reports, build clear client reports, and explain numbers to clients without overpromising. It covers the main tools (including Google Analytics 4 and Google Search Console), how tracking works, why numbers differ between tools, and how to report off-page and content activities, and how to turn data into a useful report. It is written for non-specialists and uses online store examples in USD. It does not describe our internal process; see the main onboarding module for that.
 
 ## 1. Why project managers need analytics basics

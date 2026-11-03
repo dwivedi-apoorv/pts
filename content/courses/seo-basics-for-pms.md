@@ -1,5 +1,4 @@
-# SEO Basics for Project Managers
-
+# SEO Basics
 This module gives project managers enough SEO knowledge to follow what SEO specialists are saying, ask them the right questions, and answer common client questions without overpromising. It is written for non-specialists and uses examples from online stores. It does not describe our internal process; see the main onboarding module for that.
 
 ## 1. Why project managers need SEO basics

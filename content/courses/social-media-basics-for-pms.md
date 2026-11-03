@@ -1,4 +1,4 @@
-# Social Media Marketing Basics for Project Managers
+# Social Media Marketing Basics
 
 This module gives project managers enough knowledge of social media marketing to follow what a social media manager is saying, review calendars and reports with confidence, and answer client questions without overpromising. It explains the platforms, the content, the workflow and the numbers. It is written for non-specialists and uses online store examples in USD. It does not describe our internal process; see the main onboarding module for that.
 

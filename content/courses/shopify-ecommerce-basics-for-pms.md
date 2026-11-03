@@ -1,4 +1,4 @@
-# Shopify and E-commerce Basics for Project Managers
+# Shopify and E-commerce Basics
 
 This module gives project managers enough knowledge of how online stores and Shopify work to follow developers and designers, scope work sensibly, and answer client questions with confidence. It explains how a store makes money, what the main parts of Shopify do, how to read store numbers, and what to check before launch. It is written for non-specialists and uses USD examples. It does not describe our internal process; see the main onboarding module for that.
 

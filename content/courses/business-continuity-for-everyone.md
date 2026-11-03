@@ -1,4 +1,4 @@
-# Business Continuity for Everyone
+# Business Continuity
 
 This module is for everyone in the organisation, whatever your role: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It explains in plain words how we keep serving clients when something goes wrong: a power or internet outage, a platform outage, a cyber incident, a key person leaving suddenly, an unavailable office, an ad account suspension or a client crisis. It covers who does what, who calls whom, how to protect client work, how to hand over, what to tell clients, playbooks for common failures, recovery, learning afterwards and practice. It is written for non-specialists. It is general information and does not replace the organisation's own written continuity plan, and where it touches contracts, insurance or law, it is not legal advice.
 

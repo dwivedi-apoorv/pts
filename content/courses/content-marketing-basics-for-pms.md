@@ -1,4 +1,4 @@
-# Content Marketing Basics for Project Managers
+# Content Marketing Basics
 
 This module gives project managers enough knowledge of content marketing and blogging to follow what writers, editors and SEO specialists are saying, review briefs and drafts sensibly, and answer client questions without overpromising. It explains what good content is, how it is planned and produced, and how it is measured. It is written for non-specialists and uses online store examples in USD. It does not describe our internal process; see the main onboarding module for that.
 

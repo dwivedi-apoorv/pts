@@ -1,4 +1,4 @@
-# Social Media and Public Communication for Everyone
+# Social Media and Public Communication
 
 This module is for everyone in the organisation, whatever your role or seniority: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It explains how to use social media and speak in public in a way that protects you, our clients and the company. It covers official and personal accounts, client confidentiality, photos and videos, talks and interviews, media enquiries, online abuse, copyright, advertising rules for the content we publish for clients, and what to do when something goes wrong. It is written for non-specialists in plain language and uses examples from a digital agency. It is general information and not legal advice, and it does not replace the organisation's own social media policy.
 
