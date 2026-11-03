@@ -1,4 +1,4 @@
-# Expense and Travel Policy for Everyone
+# Expense and Travel Policy
 
 This course is for everyone in the organisation: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It explains how to spend company money wisely, how to get approval, how to book travel, how to buy tools and software, how to keep receipts, how to claim and get reimbursed, how to handle client money, and what counts as a false claim. It is written for non-specialists in plain language, with examples from a digital agency and its clients. It is general information and does not replace the organisation's own written Expense and Travel Policy. Where it touches tax or law, it describes the principle only and is not legal advice.
 

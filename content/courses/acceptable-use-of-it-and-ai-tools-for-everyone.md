@@ -1,4 +1,4 @@
-# Acceptable Use of IT and AI Tools for Everyone
+# Acceptable Use of IT and AI Tools
 
 This module is for everyone in the organisation: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It explains how to use company devices, accounts, software, email, the internet, cloud storage and client systems responsibly, and how to use AI tools safely, including what may and may never be put into them. It is written for non-specialists and uses situations from a digital agency that builds and grows online stores. It is general information and does not replace the organisation's own written acceptable use policy, the contracts we have signed with clients, or applicable law.
 

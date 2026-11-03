@@ -1,4 +1,4 @@
-# Health, Safety and Wellbeing for Everyone
+# Health, Safety and Wellbeing
 
 This module is for everyone in the organisation, whatever your role: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It covers a safe office, what to do in an emergency, healthy desk work and working from home, safe travel and late working, seasonal health, illness and hygiene, mental health and the support available, substance use, accessibility, reporting accidents and near misses, returning to work, and what managers must do. It is written for non-specialists. It is general information, not medical advice and not legal advice, and it does not replace the organisation's own written health and safety policy or the instructions of your doctor, the building management or the emergency services.
 

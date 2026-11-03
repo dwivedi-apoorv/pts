@@ -1,4 +1,4 @@
-# HR Policies Handbook for Everyone
+# HR Policies Handbook
 
 This handbook is for everyone in the organisation: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It walks through the people policies you will meet from your first day to your last: joining, working hours, leave, pay, performance, learning, conduct, leaving and the paperwork that goes with each. It is written for non-specialists in plain language, with examples from a digital agency and its clients. It is general information and does not replace the organisation's own written HR policies or the laws that apply to us. Where it touches law, it describes the principle only and is not legal advice.
 

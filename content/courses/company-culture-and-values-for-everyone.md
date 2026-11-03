@@ -1,4 +1,4 @@
-# Company Culture and Values for Everyone
+# Company Culture and Values
 
 This module is for everyone in the organisation, whatever your role or seniority: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It explains what our culture is, what we stand for, how we work together, and what is expected of you and of the people around you. It is written for non-specialists in plain language and uses examples from daily agency life. It is general information and does not replace the organisation's own written policies, such as the HR Policies Handbook and the Code of Conduct and Ethics for Everyone. This module is a ready-to-edit template: the mission, vision and values shown here are draft proposals, not final decisions.
 

@@ -1,4 +1,4 @@
-# Code of Conduct and Ethics for Everyone
+# Code of Conduct and Ethics
 
 This module is for everyone in the organisation: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It explains the standards of behaviour we expect from each other and from ourselves, from respect and honesty to fair dealing, honest reporting, ethical marketing, intellectual property and how to raise a concern. It is written for non-specialists in plain language and uses examples from a digital agency that builds and grows online stores. It is general information and does not replace the organisation's own written Code of Conduct or policies.
 

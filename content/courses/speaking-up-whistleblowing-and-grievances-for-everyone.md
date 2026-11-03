@@ -1,4 +1,4 @@
-# Speaking Up: Whistleblowing and Grievance Handling for Everyone
+# Speaking Up: Whistleblowing and Grievance Handling
 
 This module is for everyone in the organisation: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It explains how to raise a concern or a complaint at work, which route to use for which kind of problem, what happens after you speak up, how you are protected, and what is expected of managers who hear a concern. It is written for non-specialists in plain language and uses examples from a digital agency and its clients. It is general information and not legal advice, and it does not replace the organisation's own written policies on whistleblowing and grievances.
 

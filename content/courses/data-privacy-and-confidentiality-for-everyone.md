@@ -1,4 +1,4 @@
-# Data Privacy and Confidentiality for Everyone
+# Data Privacy and Confidentiality
 
 This module is for everyone in the organisation: developers, designers, marketers, writers, project managers, finance, admin, sales, leaders, interns and freelancers. It explains the difference between personal data and confidential business information, what India's Digital Personal Data Protection Act, 2023 (the DPDP Act) means in plain words, and how to handle customer lists, order exports, analytics, email lists, ad audiences, client strategy, pricing, credentials and unreleased campaigns safely in daily work. It is written for non-specialists and uses examples from a digital agency that builds and grows online stores. It is general information and not legal advice, and it does not replace the organisation's own written privacy and confidentiality policy or the contracts we have signed with clients.
 

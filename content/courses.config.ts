@@ -23,6 +23,102 @@ export type CourseConfig = {
 
 export const courseConfig: CourseConfig[] = [
   {
+    file: 'hr-policies-handbook-for-everyone.md',
+    slug: 'hr-policies',
+    order: 1,
+    category: 'HR and Culture',
+    description:
+      'A friendly guide to the employment lifecycle: working hours, leave, pay, reviews, conduct, notice and exit.',
+  },
+  {
+    file: 'company-culture-and-values-for-everyone.md',
+    slug: 'culture-and-values',
+    order: 2,
+    category: 'HR and Culture',
+    description:
+      'Our mission, values and ways of working, who does what, and how to settle in during your first 90 days.',
+  },
+  {
+    file: 'code-of-conduct-and-ethics-for-everyone.md',
+    slug: 'code-of-conduct',
+    order: 3,
+    category: 'Conduct and Ethics',
+    description:
+      'The standards of behaviour we expect of everyone: honesty, respect, fair dealing with clients, ethical marketing and how to make good decisions.',
+  },
+  {
+    file: 'posh-awareness-for-everyone.md',
+    slug: 'posh-awareness',
+    order: 4,
+    category: 'Conduct and Ethics',
+    description:
+      'For everyone: what sexual harassment is, what the POSH Act requires, and how to act, report and support others, with a clear guide to the Internal Committee process.',
+  },
+  {
+    file: 'speaking-up-whistleblowing-and-grievances-for-everyone.md',
+    slug: 'speaking-up',
+    order: 5,
+    category: 'Conduct and Ethics',
+    description:
+      'How to raise a concern or a grievance, what happens next, and how you are protected from retaliation.',
+  },
+  {
+    file: 'data-privacy-and-confidentiality-for-everyone.md',
+    slug: 'data-privacy',
+    order: 6,
+    category: 'Data and Security',
+    description:
+      "Handle personal data and confidential information safely, and understand what India's DPDP Act means for our work with client stores.",
+  },
+  {
+    file: 'cyber-security-basics-for-everyone.md',
+    slug: 'cyber-security-basics',
+    order: 7,
+    category: 'Data and Security',
+    description:
+      'For everyone in the organisation: stay safe from phishing, malware and scams, handle passwords and client access properly, and know how to report an incident.',
+  },
+  {
+    file: 'acceptable-use-of-it-and-ai-tools-for-everyone.md',
+    slug: 'it-and-ai-use',
+    order: 8,
+    category: 'Data and Security',
+    description:
+      'What you may and may not do with company devices, software, accounts and AI tools, and how to use AI safely with client work.',
+  },
+  {
+    file: 'social-media-and-public-communication-for-everyone.md',
+    slug: 'social-media-communication',
+    order: 9,
+    category: 'General Policies',
+    description:
+      'What you can and cannot say online and in public about the company and our clients, and how to handle media and complaints.',
+  },
+  {
+    file: 'expense-and-travel-policy-for-everyone.md',
+    slug: 'expense-and-travel',
+    order: 10,
+    category: 'General Policies',
+    description:
+      'How to spend, claim and document company and client money correctly, including travel and approvals.',
+  },
+  {
+    file: 'health-safety-and-wellbeing-for-everyone.md',
+    slug: 'health-safety-wellbeing',
+    order: 11,
+    category: 'General Policies',
+    description:
+      'Stay safe and well at work: emergencies, ergonomics, travel safety, mental health and how to report an incident.',
+  },
+  {
+    file: 'business-continuity-for-everyone.md',
+    slug: 'business-continuity',
+    order: 12,
+    category: 'General Policies',
+    description:
+      'What to do when something disrupts our work, from outages to a key person leaving, and how to protect client delivery.',
+  },
+  {
     file: 'project-management-onboarding-module.md',
     slug: 'project-management-onboarding',
     order: 13,
@@ -77,101 +173,5 @@ export const courseConfig: CourseConfig[] = [
     category: 'Role Training',
     description:
       'Read data correctly, spot problems in reports, build clear client reports and explain numbers without overpromising.',
-  },
-  {
-    file: 'cyber-security-basics-for-everyone.md',
-    slug: 'cyber-security-basics',
-    order: 7,
-    category: 'Data and Security',
-    description:
-      'For everyone in the organisation: stay safe from phishing, malware and scams, handle passwords and client access properly, and know how to report an incident.',
-  },
-  {
-    file: 'posh-awareness-for-everyone.md',
-    slug: 'posh-awareness',
-    order: 4,
-    category: 'Conduct and Ethics',
-    description:
-      'For everyone: what sexual harassment is, what the POSH Act requires, and how to act, report and support others, with a clear guide to the Internal Committee process.',
-  },
-  {
-    file: 'code-of-conduct-and-ethics-for-everyone.md',
-    slug: 'code-of-conduct',
-    order: 3,
-    category: 'Conduct and Ethics',
-    description:
-      'The standards of behaviour we expect of everyone: honesty, respect, fair dealing with clients, ethical marketing and how to make good decisions.',
-  },
-  {
-    file: 'data-privacy-and-confidentiality-for-everyone.md',
-    slug: 'data-privacy',
-    order: 6,
-    category: 'Data and Security',
-    description:
-      "Handle personal data and confidential information safely, and understand what India's DPDP Act means for our work with client stores.",
-  },
-  {
-    file: 'acceptable-use-of-it-and-ai-tools-for-everyone.md',
-    slug: 'it-and-ai-use',
-    order: 8,
-    category: 'Data and Security',
-    description:
-      'What you may and may not do with company devices, software, accounts and AI tools, and how to use AI safely with client work.',
-  },
-  {
-    file: 'speaking-up-whistleblowing-and-grievances-for-everyone.md',
-    slug: 'speaking-up',
-    order: 5,
-    category: 'Conduct and Ethics',
-    description:
-      'How to raise a concern or a grievance, what happens next, and how you are protected from retaliation.',
-  },
-  {
-    file: 'hr-policies-handbook-for-everyone.md',
-    slug: 'hr-policies',
-    order: 1,
-    category: 'HR and Culture',
-    description:
-      'A friendly guide to the employment lifecycle: working hours, leave, pay, reviews, conduct, notice and exit.',
-  },
-  {
-    file: 'social-media-and-public-communication-for-everyone.md',
-    slug: 'social-media-communication',
-    order: 9,
-    category: 'General Policies',
-    description:
-      'What you can and cannot say online and in public about the company and our clients, and how to handle media and complaints.',
-  },
-  {
-    file: 'health-safety-and-wellbeing-for-everyone.md',
-    slug: 'health-safety-wellbeing',
-    order: 11,
-    category: 'General Policies',
-    description:
-      'Stay safe and well at work: emergencies, ergonomics, travel safety, mental health and how to report an incident.',
-  },
-  {
-    file: 'business-continuity-for-everyone.md',
-    slug: 'business-continuity',
-    order: 12,
-    category: 'General Policies',
-    description:
-      'What to do when something disrupts our work, from outages to a key person leaving, and how to protect client delivery.',
-  },
-  {
-    file: 'expense-and-travel-policy-for-everyone.md',
-    slug: 'expense-and-travel',
-    order: 10,
-    category: 'General Policies',
-    description:
-      'How to spend, claim and document company and client money correctly, including travel and approvals.',
-  },
-  {
-    file: 'company-culture-and-values-for-everyone.md',
-    slug: 'culture-and-values',
-    order: 2,
-    category: 'HR and Culture',
-    description:
-      'Our mission, values and ways of working, who does what, and how to settle in during your first 90 days.',
   },
 ];
