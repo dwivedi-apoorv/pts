@@ -1,14 +1,21 @@
 import { RolesManager } from '@/components/admin/roles-manager';
 import { loadRoles } from '@/lib/admin/data';
 import { requireAdmin } from '@/lib/auth';
-import { getCourses } from '@/lib/content';
+import { getCourses, groupCourses } from '@/lib/content';
 
 export const metadata = { title: 'Roles' };
 
 export default async function RolesPage() {
   await requireAdmin();
   const data = await loadRoles();
-  const courses = getCourses().map((c) => ({ slug: c.slug, title: c.title }));
+  // Flattened in category order, so the checklists show the same headings as the dashboard.
+  const courses = groupCourses(getCourses()).flatMap((g) =>
+    g.courses.map((c) => ({
+      slug: c.slug,
+      title: c.title,
+      category: g.category,
+    })),
+  );
 
   return (
     <main className="mt-6">

@@ -1,6 +1,8 @@
 import 'server-only';
 import contentJson from '@/generated/content.json';
 import glossaryJson from '@/generated/glossary.json';
+import { courseCategories } from '../../content/courses.config';
+import { groupByCategory } from './categories';
 import type { Chapter, Course, GlossaryEntry } from './content/types';
 
 const courses = (contentJson as unknown as Course[])
@@ -8,6 +10,9 @@ const courses = (contentJson as unknown as Course[])
   .sort((a, b) => a.order - b.order);
 
 export const getCourses = (): Course[] => courses;
+/** Courses under their category headings, in the order set in content/courses.config.ts. */
+export const groupCourses = <T extends { category: string }>(list: T[]) =>
+  groupByCategory(list, courseCategories);
 export const getCourse = (slug: string): Course | undefined =>
   courses.find((c) => c.slug === slug);
 export const getGlossary = (): GlossaryEntry[] =>

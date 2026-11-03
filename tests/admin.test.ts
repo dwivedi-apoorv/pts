@@ -10,6 +10,7 @@ import {
   type MemberRow,
   type ProgressRow,
 } from '../src/lib/admin/stats';
+import { ONBOARDING_SLUG } from '../src/lib/constants';
 import type { Course } from '../src/lib/content/types';
 
 const mkCourse = (slug: string, chapters: string[]) =>
@@ -18,7 +19,7 @@ const mkCourse = (slug: string, chapters: string[]) =>
     chapters: chapters.map((s, i) => ({ slug: s, index: i + 1 })),
   }) as unknown as Course;
 const courses = [
-  mkCourse('onb', ['a', 'b']),
+  mkCourse(ONBOARDING_SLUG, ['a', 'b']),
   mkCourse('seo', ['x', 'y', 'z', 'w']),
 ];
 const member = (o: Partial<MemberRow> & { id: string }): MemberRow => ({
@@ -50,17 +51,17 @@ describe('computeTeam / summarise', () => {
     member({ id: 'cy', active: false }),
   ];
   const progress = [
-    prog('ann', 'onb', 'a'),
-    prog('ann', 'onb', 'b'),
+    prog('ann', ONBOARDING_SLUG, 'a'),
+    prog('ann', ONBOARDING_SLUG, 'b'),
     prog('ann', 'seo', 'x'),
     prog('ann', 'seo', 'gone-chapter'),
-    prog('bob', 'onb', 'a'),
+    prog('bob', ONBOARDING_SLUG, 'a'),
   ];
   const team = computeTeam({ courses, members, progress, activity: [] });
   const ann = team.find((m) => m.id === 'ann')!;
 
   it('computes per course and overall percentages, ignoring removed chapters', () => {
-    expect(ann.perCourse.onb.percent).toBe(100);
+    expect(ann.perCourse[ONBOARDING_SLUG].percent).toBe(100);
     expect(ann.perCourse.seo.percent).toBe(25);
     expect(ann.chaptersDone).toBe(3);
     expect(ann.overallPercent).toBe(50); // 3 of 6
@@ -113,7 +114,10 @@ describe('needsNudge', () => {
       member({ id: 'done', created_at: '2026-01-01T00:00:00Z' }),
       member({ id: 'off', created_at: '2026-01-01T00:00:00Z', active: false }),
     ],
-    progress: [prog('done', 'onb', 'a'), prog('done', 'onb', 'b')],
+    progress: [
+      prog('done', ONBOARDING_SLUG, 'a'),
+      prog('done', ONBOARDING_SLUG, 'b'),
+    ],
     activity: [],
   });
   it('lists active members with unfinished onboarding and 14 days of silence', () => {
@@ -138,7 +142,7 @@ describe('filterAndSort', () => {
       }),
       member({ id: 'c', full_name: 'Cy', active: false }),
     ],
-    progress: [prog('b', 'onb', 'a')],
+    progress: [prog('b', ONBOARDING_SLUG, 'a')],
     activity: [],
   });
   it('sorts by name, last login and progress', () => {

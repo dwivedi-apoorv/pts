@@ -17,6 +17,7 @@ import {
 } from '../src/lib/admin/stats';
 import { buildGlossary, buildSearchRecords } from '../src/lib/content/build';
 import { loadCourses } from '../src/lib/content/load';
+import { ONBOARDING_SLUG } from '../src/lib/constants';
 import type { Course } from '../src/lib/content/types';
 
 const ALL = ['onb', 'seo', 'cyber'];
@@ -196,7 +197,7 @@ describe('team statistics with roles', () => {
       chapters: chs.map((s, i) => ({ slug: s, index: i + 1 })),
     }) as unknown as Course;
   const courses = [
-    mk('onb', ['a', 'b']),
+    mk(ONBOARDING_SLUG, ['a', 'b']),
     mk('seo', ['x', 'y']),
     mk('cyber', ['p', 'q']),
   ];
@@ -220,7 +221,7 @@ describe('team statistics with roles', () => {
   });
   const access = {
     forEveryone: ['cyber'],
-    byRole: { dev: ['seo'], pm: ['onb', 'seo'] },
+    byRole: { dev: ['seo'], pm: [ONBOARDING_SLUG, 'seo'] },
   };
 
   const team = computeTeam({
@@ -233,9 +234,9 @@ describe('team statistics with roles', () => {
     ],
     progress: [
       prog('dev', 'seo', 'x'),
-      prog('dev', 'onb', 'a'),
-      prog('pm', 'onb', 'a'),
-      prog('pm', 'onb', 'b'),
+      prog('dev', ONBOARDING_SLUG, 'a'),
+      prog('pm', ONBOARDING_SLUG, 'a'),
+      prog('pm', ONBOARDING_SLUG, 'b'),
     ],
     activity: [],
     access,
@@ -244,7 +245,11 @@ describe('team statistics with roles', () => {
 
   it('assigns role courses plus courses for everyone, and everything to admins', () => {
     expect([...get('dev').assigned].sort()).toEqual(['cyber', 'seo']);
-    expect([...get('pm').assigned].sort()).toEqual(['cyber', 'onb', 'seo']);
+    expect([...get('pm').assigned].sort()).toEqual([
+      'cyber',
+      ONBOARDING_SLUG,
+      'seo',
+    ]);
     expect([...get('norole').assigned]).toEqual(['cyber']);
     expect(get('boss').assigned.size).toBe(3);
   });

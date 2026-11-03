@@ -3,7 +3,7 @@ import { ProgressBar } from '@/components/progress-bar';
 import { StatusChip } from '@/components/status-chip';
 import { getAllowedSlugs } from '@/lib/access';
 import { requireMember } from '@/lib/auth';
-import { getCourses } from '@/lib/content';
+import { getCourses, groupCourses } from '@/lib/content';
 import { courseProgress } from '@/lib/progress-calc';
 import { getUserProgress } from '@/lib/progress';
 
@@ -34,30 +34,46 @@ export default async function MePage() {
       <p className="mt-4 text-sm">
         {done} of {total} chapters completed across all courses.
       </p>
-      <ul className="mt-6 space-y-4">
-        {rows.map(({ course, progress }) => (
-          <li key={course.slug} className="bg-card rounded-xl border p-4">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <Link
-                href={`/courses/${course.slug}`}
-                className="font-medium hover:underline"
-              >
-                {course.title}
-              </Link>
-              <StatusChip status={progress.status} />
-            </div>
-            <div className="mt-3 flex items-center gap-3">
-              <ProgressBar
-                percent={progress.percent}
-                label={`${course.title} progress`}
-              />
-              <span className="w-24 text-right text-sm tabular-nums">
-                {progress.done} of {progress.total}
-              </span>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {groupCourses(
+        rows.map((r) => ({ ...r, category: r.course.category })),
+      ).map((group, i) => (
+        <section
+          key={group.category}
+          aria-labelledby={`cat-${i}`}
+          className="mt-8"
+        >
+          <h2
+            id={`cat-${i}`}
+            className="text-muted-foreground text-sm font-semibold tracking-wide uppercase"
+          >
+            {group.category}
+          </h2>
+          <ul className="mt-2 space-y-4">
+            {group.courses.map(({ course, progress }) => (
+              <li key={course.slug} className="bg-card rounded-xl border p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <Link
+                    href={`/courses/${course.slug}`}
+                    className="font-medium hover:underline"
+                  >
+                    {course.title}
+                  </Link>
+                  <StatusChip status={progress.status} />
+                </div>
+                <div className="mt-3 flex items-center gap-3">
+                  <ProgressBar
+                    percent={progress.percent}
+                    label={`${course.title} progress`}
+                  />
+                  <span className="w-24 text-right text-sm tabular-nums">
+                    {progress.done} of {progress.total}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </main>
   );
 }

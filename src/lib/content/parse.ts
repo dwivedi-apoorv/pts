@@ -22,6 +22,7 @@ export type CourseMeta = {
   slug: string;
   description: string;
   order: number;
+  category?: string;
   badge?: string;
 };
 
@@ -423,6 +424,7 @@ export function parseCourse(
     title,
     description: meta.description,
     order: meta.order,
+    category: meta.category ?? 'Courses',
     ...(meta.badge ? { badge: meta.badge } : {}),
     intro,
     chapters,

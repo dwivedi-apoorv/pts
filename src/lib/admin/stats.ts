@@ -1,5 +1,6 @@
 import type { Course } from '../content/types';
 import { allowedSlugs } from '../access-calc';
+import { ONBOARDING_SLUG } from '../constants';
 import { courseProgress, type CourseProgress } from '../progress-calc';
 
 export type MemberRow = {
@@ -76,7 +77,7 @@ export function computeTeam(input: {
     last.set(a.user_id, later(last.get(a.user_id) ?? null, a.at)!);
 
   const allSlugs = courses.map((c) => c.slug);
-  const first = courses[0];
+  const onboarding = courses.find((c) => c.slug === ONBOARDING_SLUG);
 
   return members.map((m) => {
     const byCourse =
@@ -118,9 +119,9 @@ export function computeTeam(input: {
       ),
       // Onboarding only has to be finished by people it is assigned to.
       onboardingComplete:
-        !first ||
-        !assigned.has(first.slug) ||
-        perCourse[first.slug].status === 'completed',
+        !onboarding ||
+        !assigned.has(onboarding.slug) ||
+        perCourse[onboarding.slug].status === 'completed',
     };
   });
 }

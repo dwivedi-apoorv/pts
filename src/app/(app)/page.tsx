@@ -4,7 +4,7 @@ import { CourseCard } from '@/components/course-card';
 import { buttonVariants } from '@/components/ui/button';
 import { getAllowedSlugs } from '@/lib/access';
 import { requireMember } from '@/lib/auth';
-import { getChapter, getCourse, getCourses } from '@/lib/content';
+import { getChapter, getCourse, getCourses, groupCourses } from '@/lib/content';
 import { courseProgress } from '@/lib/progress-calc';
 import { getUserProgress } from '@/lib/progress';
 
@@ -92,21 +92,35 @@ export default async function Dashboard() {
           Your courses
         </h2>
         <p className="text-muted-foreground mt-1 text-sm">
-          Start with onboarding if it is in your list, then work through the
-          rest in any order.
+          Company-wide policies come first, then training for your role. Work
+          through them in any order.
         </p>
-        <ul className="mt-4 divide-y overflow-hidden rounded-xl border">
-          {courses.map((course) => (
-            <CourseCard
-              key={course.slug}
-              course={course}
-              progress={courseProgress(
-                course,
-                progress.completed[course.slug] ?? [],
-              )}
-            />
-          ))}
-        </ul>
+        {groupCourses(courses).map((group, i) => (
+          <section
+            key={group.category}
+            aria-labelledby={`cat-${i}`}
+            className="mt-6"
+          >
+            <h3
+              id={`cat-${i}`}
+              className="text-muted-foreground text-sm font-semibold tracking-wide uppercase"
+            >
+              {group.category}
+            </h3>
+            <ul className="mt-2 divide-y overflow-hidden rounded-xl border">
+              {group.courses.map((course) => (
+                <CourseCard
+                  key={course.slug}
+                  course={course}
+                  progress={courseProgress(
+                    course,
+                    progress.completed[course.slug] ?? [],
+                  )}
+                />
+              ))}
+            </ul>
+          </section>
+        ))}
       </section>
     </main>
   );

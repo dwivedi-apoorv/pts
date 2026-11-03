@@ -18,14 +18,14 @@ export function CourseCard({
     <li className="hover:bg-muted/50 focus-within:bg-muted/50 relative flex flex-col gap-3 px-4 py-4 transition-colors motion-reduce:transition-none sm:flex-row sm:items-center sm:gap-6 sm:px-5">
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <h3 className="text-base font-semibold">
+          <h4 className="text-base font-semibold">
             <Link
               href={`/courses/${course.slug}`}
               className="after:absolute after:inset-0 focus:outline-none"
             >
               {course.title}
             </Link>
-          </h3>
+          </h4>
           {course.badge && <Badge>{course.badge}</Badge>}
           <StatusChip status={progress.status} />
         </div>

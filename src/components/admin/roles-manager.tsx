@@ -31,7 +31,7 @@ import {
   type RoleResult,
 } from '@/lib/admin/role-actions';
 
-export type CourseOption = { slug: string; title: string };
+export type CourseOption = { slug: string; title: string; category: string };
 export type RoleRow = {
   id: string;
   name: string;
@@ -58,26 +58,42 @@ function CourseChecklist({
   onToggle: (slug: string) => void;
   idPrefix: string;
 }) {
+  // `courses` arrives already ordered by category, so consecutive items share a heading.
+  const groups: { category: string; items: CourseOption[] }[] = [];
+  for (const c of courses) {
+    const last = groups[groups.length - 1];
+    if (last && last.category === c.category) last.items.push(c);
+    else groups.push({ category: c.category, items: [c] });
+  }
   return (
-    <ul className="divide-y rounded-lg border">
-      {courses.map((c) => (
-        <li key={c.slug}>
-          <label
-            htmlFor={`${idPrefix}-${c.slug}`}
-            className="hover:bg-muted/50 flex cursor-pointer items-center gap-3 px-3 py-2 text-sm"
-          >
-            <input
-              id={`${idPrefix}-${c.slug}`}
-              type="checkbox"
-              checked={selected.has(c.slug)}
-              onChange={() => onToggle(c.slug)}
-              className="accent-primary size-4"
-            />
-            {c.title}
-          </label>
-        </li>
+    <div className="space-y-4">
+      {groups.map((g) => (
+        <div key={g.category}>
+          <p className="text-muted-foreground mb-1 text-xs font-semibold tracking-wide uppercase">
+            {g.category}
+          </p>
+          <ul className="divide-y rounded-lg border">
+            {g.items.map((c) => (
+              <li key={c.slug}>
+                <label
+                  htmlFor={`${idPrefix}-${c.slug}`}
+                  className="hover:bg-muted/50 flex cursor-pointer items-center gap-3 px-3 py-2 text-sm"
+                >
+                  <input
+                    id={`${idPrefix}-${c.slug}`}
+                    type="checkbox"
+                    checked={selected.has(c.slug)}
+                    onChange={() => onToggle(c.slug)}
+                    className="accent-primary size-4"
+                  />
+                  {c.title}
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
 

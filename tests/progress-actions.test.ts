@@ -64,7 +64,10 @@ async function actions() {
 }
 async function realKeys() {
   const { loadCourses } = await import('../src/lib/content/load');
-  const course = loadCourses()[0];
+  // The onboarding course has checklist items and a knowledge check.
+  const course = loadCourses().find(
+    (c) => c.slug === 'project-management-onboarding',
+  )!;
   const item = course.chapters.flatMap((c) => c.checklistItems ?? [])[0];
   return {
     course,

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { requireAdmin } from '@/lib/auth';
+import { ONBOARDING_SLUG } from '@/lib/constants';
 import { loadTeam } from '@/lib/admin/data';
 import {
   band,
@@ -108,7 +109,8 @@ export default async function AdminOverview({
                   {m.lastActivity
                     ? daysAgo(m.lastActivity, now)
                     : `none (added ${daysAgo(m.created_at, now)})`}
-                  {' · '}onboarding {m.perCourse[courses[0].slug].percent}%
+                  {' · '}onboarding {m.perCourse[ONBOARDING_SLUG]?.percent ?? 0}
+                  %
                 </span>
               </li>
             ))}

@@ -28,8 +28,13 @@ const countTables = (md: string) => {
 };
 
 describe('real course files', () => {
-  it('loads all seven courses in order', () => {
-    expect(courses.map((c) => c.slug)).toEqual(courseConfig.map((c) => c.slug));
+  it('loads every configured course, sorted by order', () => {
+    const configured = [...courseConfig].sort((a, b) => a.order - b.order);
+    expect(courses.map((c) => c.slug)).toEqual(configured.map((c) => c.slug));
+    // orders are unique, so the sequence is unambiguous
+    expect(new Set(courseConfig.map((c) => c.order)).size).toBe(
+      courseConfig.length,
+    );
   });
 
   it.each(Object.entries(expected))('%s has %i chapters', (slug, count) => {

@@ -120,7 +120,7 @@ If Word changes straight quotes to curly quotes that is fine. What Word can brea
 ## Adding a new course
 
 1. Add the `.md` file to `content/courses/`.
-2. Add an entry to `content/courses.config.ts`: `file`, a unique `slug`, `order`, a one-sentence `description`, and optionally a `badge`.
+2. Add an entry to `content/courses.config.ts`: `file`, a unique `slug`, `order`, a `category` (one of the headings listed at the top of that file), a one-sentence `description`, and optionally a `badge`. To add a new heading, add it to `courseCategories` there. Headings appear in that order, and courses inside a heading follow their `order` number.
 3. Add the expected chapter count to `tests/fixtures/expected-chapters.json` so the test suite covers it.
 4. Run `npm run build:content` and `npm test`.
 5. After deploying, open **Admin, Roles** and either mark the course "for everyone" or tick it on the roles that need it. Until then only admins can see it.

@@ -3,6 +3,7 @@ export type Course = {
   title: string;
   description: string;
   order: number;
+  category: string;
   badge?: string;
   intro: string; // markdown before first ##
   chapters: Chapter[];
